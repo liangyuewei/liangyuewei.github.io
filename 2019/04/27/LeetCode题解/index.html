@@ -6,18 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="description" content="本篇是LeetCode的算法题目，难度在简单、中等之间，也是算法面试中常见的题型，如果在准备算法相关相关的面试，这些题目应该掌握并能在白板上熟练手写。 做题四要素 说明（题目细节、边界条件、可能的极端错误情况） 解法（所有可能的解法都沟通一遍，时间复杂度&amp;amp;空间复杂度，最优解） 写代码 测试用例  题型【题⽬】如何反转⼀个单链表  【解决思路】 难度不⼤，直接反转链表即可  12345678">
-<meta name="keywords" content="Leetcode,算法与数据结构">
+    <meta name="description" content="本篇是LeetCode的算法题目，难度在简单、中等之间，也是算法面试中常见的题型，如果在准备算法相关的面试，这些题目应该掌握并能在白板上熟练手写。 做题四要素 说明（题目细节、边界条件、可能的极端错误情况） 解法（所有可能的解法都沟通一遍，时间复杂度&amp;amp;空间复杂度，最优解） 写代码 测试用例  题型【题⽬】如何反转⼀个单链表  【解决思路】 难度不⼤，直接反转链表即可  1234567891">
+<meta name="keywords" content="算法与数据结构,Leetcode">
 <meta property="og:type" content="article">
 <meta property="og:title" content="LeetCode题解">
 <meta property="og:url" content="http://liangyuewei.com/2019/04/27/LeetCode题解/index.html">
 <meta property="og:site_name" content="Yuewei.Liang">
-<meta property="og:description" content="本篇是LeetCode的算法题目，难度在简单、中等之间，也是算法面试中常见的题型，如果在准备算法相关相关的面试，这些题目应该掌握并能在白板上熟练手写。 做题四要素 说明（题目细节、边界条件、可能的极端错误情况） 解法（所有可能的解法都沟通一遍，时间复杂度&amp;amp;空间复杂度，最优解） 写代码 测试用例  题型【题⽬】如何反转⼀个单链表  【解决思路】 难度不⼤，直接反转链表即可  12345678">
+<meta property="og:description" content="本篇是LeetCode的算法题目，难度在简单、中等之间，也是算法面试中常见的题型，如果在准备算法相关的面试，这些题目应该掌握并能在白板上熟练手写。 做题四要素 说明（题目细节、边界条件、可能的极端错误情况） 解法（所有可能的解法都沟通一遍，时间复杂度&amp;amp;空间复杂度，最优解） 写代码 测试用例  题型【题⽬】如何反转⼀个单链表  【解决思路】 难度不⼤，直接反转链表即可  1234567891">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-04-27T15:48:04.673Z">
+<meta property="og:updated_time" content="2019-04-27T15:52:15.145Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LeetCode题解">
-<meta name="twitter:description" content="本篇是LeetCode的算法题目，难度在简单、中等之间，也是算法面试中常见的题型，如果在准备算法相关相关的面试，这些题目应该掌握并能在白板上熟练手写。 做题四要素 说明（题目细节、边界条件、可能的极端错误情况） 解法（所有可能的解法都沟通一遍，时间复杂度&amp;amp;空间复杂度，最优解） 写代码 测试用例  题型【题⽬】如何反转⼀个单链表  【解决思路】 难度不⼤，直接反转链表即可  12345678">
+<meta name="twitter:description" content="本篇是LeetCode的算法题目，难度在简单、中等之间，也是算法面试中常见的题型，如果在准备算法相关的面试，这些题目应该掌握并能在白板上熟练手写。 做题四要素 说明（题目细节、边界条件、可能的极端错误情况） 解法（所有可能的解法都沟通一遍，时间复杂度&amp;amp;空间复杂度，最优解） 写代码 测试用例  题型【题⽬】如何反转⼀个单链表  【解决思路】 难度不⼤，直接反转链表即可  1234567891">
     
     
         
@@ -72,6 +72,8 @@
     <br>
     <span id="actions">
       <ul>
+        
+        <li><a class="icon" href="/2019/04/27/经典排序算法/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
         <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
@@ -143,7 +145,7 @@
   
 
   <div class="content" itemprop="articleBody">
-    <p>本篇是LeetCode的算法题目，难度在简单、中等之间，也是算法面试中常见的题型，如果在准备算法相关相关的面试，这些题目应该掌握并能在白板上熟练手写。</p>
+    <p>本篇是LeetCode的算法题目，难度在简单、中等之间，也是算法面试中常见的题型，如果在准备算法相关的面试，这些题目应该掌握并能在白板上熟练手写。</p>
 <h2 id="做题四要素"><a href="#做题四要素" class="headerlink" title="做题四要素"></a>做题四要素</h2><ul>
 <li>说明（题目细节、边界条件、可能的极端错误情况）</li>
 <li>解法（所有可能的解法都沟通一遍，时间复杂度&amp;空间复杂度，最优解）</li>
