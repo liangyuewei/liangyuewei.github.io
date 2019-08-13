@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="镜像介绍 镜像是容器运行的基础，容器引擎服务可使用不同的镜像启动相应的容器。 镜像是由按层封装好的文件系统和描述镜像的元数据构成的文件系统包，包含应用所需要的系统、环境、配置和应用本身等。镜像由开发者构建好之后上传至镜像仓库，使用者获取镜像之后就可以使用镜像直接构建自己应用。 与虚拟机所用的系统镜像不同，容器镜像不仅没有Linux内核，同时在格式上也有很大的区别。虚拟机是将一个完整系统封装成一个镜">
+<meta name="keywords" content="Docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker 基础">
+<meta property="og:url" content="http://liangyuewei.com/2019/08/12/Docker-基础/index.html">
+<meta property="og:site_name" content="Yuewei.Liang">
+<meta property="og:description" content="镜像介绍 镜像是容器运行的基础，容器引擎服务可使用不同的镜像启动相应的容器。 镜像是由按层封装好的文件系统和描述镜像的元数据构成的文件系统包，包含应用所需要的系统、环境、配置和应用本身等。镜像由开发者构建好之后上传至镜像仓库，使用者获取镜像之后就可以使用镜像直接构建自己应用。 与虚拟机所用的系统镜像不同，容器镜像不仅没有Linux内核，同时在格式上也有很大的区别。虚拟机是将一个完整系统封装成一个镜">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://liangyuewei.com/images/容器镜像结构.png">
+<meta property="og:image" content="http://liangyuewei.com/source/images/镜像元数据.png">
+<meta property="og:image" content="http://liangyuewei.com/source/images/docker%20数据卷.png">
+<meta property="og:image" content="http://liangyuewei.com/source/images/Bridge%20网络模式.png">
+<meta property="og:image" content="http://liangyuewei.com/source/images/Host%20网络模式.png">
+<meta property="og:image" content="http://liangyuewei.com/source/images/Container%20网络模式.png">
+<meta property="og:updated_time" content="2019-08-13T00:21:48.424Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker 基础">
+<meta name="twitter:description" content="镜像介绍 镜像是容器运行的基础，容器引擎服务可使用不同的镜像启动相应的容器。 镜像是由按层封装好的文件系统和描述镜像的元数据构成的文件系统包，包含应用所需要的系统、环境、配置和应用本身等。镜像由开发者构建好之后上传至镜像仓库，使用者获取镜像之后就可以使用镜像直接构建自己应用。 与虚拟机所用的系统镜像不同，容器镜像不仅没有Linux内核，同时在格式上也有很大的区别。虚拟机是将一个完整系统封装成一个镜">
+<meta name="twitter:image" content="http://liangyuewei.com/images/容器镜像结构.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Docker 基础</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2019/08/12/【转载】软件测试之测试用例颗粒度问题/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://liangyuewei.com/2019/08/12/Docker-基础/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://liangyuewei.com/2019/08/12/Docker-基础/&text=Docker 基础"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://liangyuewei.com/2019/08/12/Docker-基础/&title=Docker 基础"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://liangyuewei.com/2019/08/12/Docker-基础/&is_video=false&description=Docker 基础"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Docker 基础&body=Check out this article: http://liangyuewei.com/2019/08/12/Docker-基础/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://liangyuewei.com/2019/08/12/Docker-基础/&title=Docker 基础"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://liangyuewei.com/2019/08/12/Docker-基础/&title=Docker 基础"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://liangyuewei.com/2019/08/12/Docker-基础/&title=Docker 基础"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://liangyuewei.com/2019/08/12/Docker-基础/&title=Docker 基础"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://liangyuewei.com/2019/08/12/Docker-基础/&name=Docker 基础&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Docker 基础
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Yuewei.Liang</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-08-12T15:44:12.000Z" itemprop="datePublished">2019-08-12</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Docker/">Docker</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p><strong>镜像介绍</strong></p>
+<p>镜像是容器运行的基础，容器引擎服务可使用不同的镜像启动相应的容器。</p>
+<p>镜像是由按层封装好的文件系统和描述镜像的元数据构成的文件系统包，包含应用所需要的系统、环境、配置和应用本身等。镜像由开发者构建好之后上传至镜像仓库，使用者获取镜像之后就可以使用镜像直接构建自己应用。</p>
+<p>与虚拟机所用的系统镜像不同，容器镜像不仅没有Linux内核，同时在格式上也有很大的区别。虚拟机是将一个完整系统封装成一个镜像文件，而容器镜像不是一个文件，而是分层存储的文件系统。</p>
+<p><strong>镜像特点</strong></p>
+<ol>
+<li>分层存储</li>
+</ol>
+<p>分层存储是容器镜像的主要特点之一。每个镜像都是由一系列的“镜像层”组成。当需要修改镜像内的某个文件时，只会对最上方的读写层进行改动，不会覆盖下层已有文件系统的内容。当提交新的镜像时，保存的内容仅为最上层可读写文件系统被更新的文件，这样就实现了在不同的容器镜像间共享镜像层的效果。</p>
+<p>下图是一个简单的容器镜像示例，最上层是容器的读写层，剩余的是只读层。</p>
+<p><img src="/images/容器镜像结构.png" alt="容器镜像结构"></p>
+<ol start="2">
+<li><p>写时复制</p>
+</li>
+<li><p>容器镜像使用了写时复制（Copy-on-Write）的策略，在多个容器之间共享镜像，每容器在启动的时候并不需要单独复制一份镜像文件，而是将所有镜像层以只读的方式挂载到一个挂载点，再在上面覆盖一个可读写的内容层。在未更改文件内容时，所有容器共享同一份数据，只有在容器运行过程中文件系统发生变化时，才会把变化的文件内容写到可读可写层，并隐藏只读层中的旧版本文件。写时复制配合分层机制减少了镜像对磁盘空间的占用和容器启动时间。</p>
+</li>
+<li><p>内容寻址</p>
+</li>
+<li><p>在Docker 1.10版本后，引入了内容寻址存储的机制，根据文件的内容来索引镜像和镜像层。对镜像层的内容计算校验和，生成一个内容哈希值，并以此哈希值作为镜像层的唯一标识。</p>
+</li>
+<li><p>联合挂载</p>
+<p>联合挂载技术可以在一个挂载点上同时挂载多个文件系统，将挂载点的原目录与被挂载内容进行整合，使得最终可见的文件系统包含整合之后各层的文件和目录。实现这种联合挂载技术的文件系统通常被称为联合文件系统（Union Filesystem）。</p>
+</li>
+</ol>
+<p><strong>镜像构建</strong></p>
+<ol>
+<li>docker build</li>
+<li><p>这种构建方式基于Dockerfile来自动构建镜像，Dockerfile的可读性和可理解性都较高。其机制为：每一行都会基于上一层的中间容器来执行对应的修改命名，然后通过docker build 来提交，经过一次次循环，最终提交成为目标镜像。构建镜像的Dockerfile示例如下：</p>
+</li>
+<li><figure class="highlight plain"><figcaption><span>ubuntu:15.04</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">COPY . /app</span><br><span class="line">RUN make /app</span><br><span class="line">CMD python /app/app.py</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Dockerfile中的每一行指令（COPY、RUN、CMD）都会生成新的一层，叠加在上一个指令生成的文件系统上，最后所有镜像叠加就构成了镜像的文件系统。</p>
+</li>
+<li><p>docker commit</p>
+</li>
+</ol>
+<p>这种构建镜像的方式，首先使用某个镜像启动容器，进入容器中完成需要的操作，最后在宿主主机上执行docker commit 命令，该命令会将此时的容器打包成一个新的镜像。</p>
+<p><strong>镜像仓库</strong></p>
+<p>镜像仓库是镜像存储的位置，也是用来获得镜像的重要渠道之一。</p>
+<ol>
+<li>公共仓库</li>
+<li><p>公共仓库是面向整个互联网用户的仓库，典型的代表为Docker Hub。用户可以将自己创建的镜像上传至公共仓库，软件厂商也可以以镜像形式发布自己的软件。</p>
+</li>
+<li><p>私有仓库</p>
+</li>
+</ol>
+<p>考虑到镜像的敏感性与网络的可用性和稳定性等因素，出现了私有仓库的使用场景，典型的稀有仓库实现代表为 Harbor。</p>
+<p><strong>镜像的使用</strong></p>
+<p>除了docker pull/push等常用的命令外，Docker中操作镜像的一些其他常用命令如下。</p>
+<ol>
+<li>docker export</li>
+<li><p>将容器导出到本地</p>
+</li>
+<li><p># docker export redis-server -o redis.tar </p>
+</li>
+<li><p>docker import </p>
+</li>
+</ol>
+<p>​     将 容器从本地以镜像的方式导入</p>
+<p>​     # docker import -m import-redis redis.tar</p>
+<ol start="3">
+<li>docker save</li>
+</ol>
+<p>将（一个或多个）镜像导出至本地</p>
+<p>​     # docker save nginx redis -o nginx-redis.tar</p>
+<p><strong>镜像元数据</strong></p>
+<p>​         在 Linux 系统中 Docker 的数据默认存放在 /var/lib/docker 中，基于不同的系统又有不同存储驱动、不同目录结构。</p>
+<p><img src="/source/images/镜像元数据.png" alt="镜像元数据"></p>
+<p>镜像每一层的 ID 是该文件内容的哈希校验值，作为该层的唯一标识。获取镜像后，会使用以下方式索引镜像：首先读取镜像的 manifests，根据 manifests 文件中 config 的 sha256 码，得到镜像 config 文件，遍历manifests 里面的所有 layer，根据 sha256 码在本地查找，拼出完整的镜像。</p>
+<p><strong>存储驱动</strong></p>
+<p>​         理想情况下，使用挂载卷来存储高读写的目录，很少将数据直接写入容器的可写层。但是，总有些特殊需求需要直接写入容器的可写层。这时候就需要存储驱动来作为容器和宿主机之间的媒介。Docker 依靠驱动技术来管理镜像和运行它们的容器间的存储和交互。</p>
+<p>​        目前，Docker 支持 AUFS、BtrFS、Device Mapper、OverlayFS、ZFS 五种存储驱动。没有单一的存储驱动适合所有的应用场景，要根据不同的场景选择合适的存储驱动，才能有效提高 Docker 的性能。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>特点</th>
+<th>优点</th>
+<th>缺点</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AUFS</td>
+<td>联合文件系统未并入内核主线文件级存储</td>
+<td>Docker 的第一个存储驱动，比较稳定，且在大量的生产环境中实践过，有较强的社区支持</td>
+<td>有多层，写时复制操作时，如果文件比较大且存在比较低的层，可能会慢一些</td>
+<td>大并发，少 I/O 的场景</td>
+</tr>
+<tr>
+<td>OverlayFS</td>
+<td>联合文件系统并入内核主线文件级存储</td>
+<td>只有两层</td>
+<td>不管修改的内容大小，都会复制整个文件。对大文件进行修改要比小文件修改消耗更多的时间</td>
+<td>大并发、少 I/O 场景</td>
+</tr>
+<tr>
+<td>Device Mapper</td>
+<td>并入内核主线块级存储</td>
+<td>无论是大文件还是小文件，修改时都复制需要修改的块，并不是整个文件</td>
+<td>不支持共享存储，当有多个容器读同一个文件时，需要生成多个副本。在很多容器启停的情况下可能会导致硬盘溢出</td>
+<td>适合 I/O 密集的场景</td>
+</tr>
+<tr>
+<td>BtrFs</td>
+<td>并入内核主线文件级存储</td>
+<td>直接操作底层设备，支持动态添加设备</td>
+<td>不支持共享存储，标识当有多个容器读同一个文件时，需要生成多个副本</td>
+<td>不适合在高容器密度的 PaaS 平台上使用</td>
+</tr>
+<tr>
+<td>ZFS</td>
+<td>把所有设备集中到一个存储池中进行管理</td>
+<td>支持多个容器共享一个缓存块，适合大内存的环境</td>
+<td>写时复制使碎片化问题更加严重，文件在硬盘上的物理地址会变得不再连续，顺序读会变得性能比较差</td>
+<td>适合 PaaS 和高密度的场景</td>
+</tr>
+</tbody>
+</table>
+<p><strong>数据卷</strong></p>
+<p>​      通常，有状态的容器有数据持久化存储的需求。文件系统的改动都是发生在最上面的可读可写层。在容器的生命周期内，它是持续的，包括容器被停止后。但是，当容器被删除后，该数据层也随之被删除。</p>
+<p>​      因此，Docker 采用数据卷的形式向容器提供持久化存储。数据卷是 Docker 容器数据持久化存储的首选机制。绑定挂载依赖于主机的目录结构，但数据卷是由 Docker 管理。与绑定挂载相比，数据卷有以下几个优点：</p>
+<ol>
+<li>与绑定挂载相比，数据卷更容易备份或迁移</li>
+<li>可以使用 Docker CLI 或 Docker API 管理数据卷</li>
+<li>数据卷在 Linux 和 Windows 上均可使用</li>
+<li>数据卷可以在多个容器之间更安全地共享</li>
+<li>数据卷驱动程序允许在远程主机或云上存储数据卷、加密卷的内容或添加其他功能</li>
+<li>新数据卷的内容可以由容器预填充</li>
+</ol>
+<p>​    与使用容器的读写层保存数据相比，数据卷通常是更好的选择。因为使用数据卷存储不会增加容器的大小，并且数据卷是持久化的，不会依赖于容器的生命周期。</p>
+<p><img src="/source/images/docker 数据卷.png" alt="docker 数据卷"></p>
+<p><strong>容器网络支撑技术</strong></p>
+<p>容器网络虽然有多种形容，但多数使用了若干种支撑技术，例如网络命名空间（Network Namespace）、Linux网桥（Linux Bridge）以及虚拟网络接口对（Veth Pair）。</p>
+<p><strong>网络命名空间</strong></p>
+<p>网络命名空间是一种实现网络隔离的技术，创建一个网络命名空间后就有一个包括网络接口、路由、访问控制规则（Iptables）等网络资源的独立网络环境，该命名空间的网络与其他网络隔离。</p>
+<p><strong>Linux 网桥</strong></p>
+<p>Linux 网桥是 Linux 系统中虚拟网桥，它可以将不同主机的网络接口连接，从而实现主机间的通信。</p>
+<p>Docker启动后，会默认创建名为 docker0 的 Linux 网桥。在未创建任何容器时，可以看到 docker0 网桥没有接口连接。</p>
+<p># brctl show<br>bridge name       bridge id                       STP enabled         interfaces<br>docker0              8000.0242d1837f60      no</p>
+<p>当创建容器时（d45faaddb528），Docker会为容器创建虚拟网络接口，并将其连接到 Docker0网桥上。</p>
+<p># brctl show<br>bridge name             bridge id                         STP                     enabled interfaces<br>docker0                     8000.0242f22b2de4      no                        veth4d91464<br>                                                                                                         veth6ed0a8c</p>
+<p><strong>虚拟网络接口对</strong></p>
+<p>为了实现容器与宿主机网络、外部网络之间的通信，需要通过虚拟网络接口对将容器与 Linux 网桥连接。</p>
+<p>当 Docker 启动一个容器时，会创建一个虚拟网络接口对，即两个相连的虚拟网络接口。其中一个连接容器，成为容器的网卡 eth0；另一个被连接到 Docker0 网桥上，从而容器内部的数据包先后经过 eth0 和 vethxxx对到达 Docker0 网桥，实现在同一子网内不同容器之间的通信。</p>
+<p>通过下面命令可以得到容器的网卡 eth0 在宿主机上的编号（peer-ifindex)。</p>
+<p># docker exec d458f9bd528 ethtool -S eth0<br>NIC statistics:<br>peer_ifindex: 37</p>
+<p>继续执行下面命令找到宿主机上peer-ifindex为37的接口名称。</p>
+<p># ip link | grep 37<br>37: vethfaa2a17@if36: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master<br>docker0 state UP mode DEFAULT</p>
+<p>运行 ethtool 可查找其对端接口编号。</p>
+<p># ethtool -S vethfaa2a17<br>NIC statistics:<br>peer_ifindex: 36</p>
+<p><strong>主机网络</strong></p>
+<p><strong>None网络模式</strong></p>
+<p>None网络模式下，容器拥有自己的网络命名空间，但是并不为容器进行任何的网络配置。创建的容器只有loopback接口，需要用户为容器添加网卡、配置 IP等。</p>
+<p><strong>Bridge 网络模式</strong></p>
+<p>Bridge（网桥）网络模式主要是利用Iptables进行NAT和端口映射，从而提供单主机网络。与虚拟机下的NAT网络类似，这种网络模式下同一主机的容器之间是可以相互通信的，但是分配给每个容器的 IP 地址从主机外部不能访问。</p>
+<p>Bridge 网络是 Docker 默认的网络类型，在安装完 Docker 后会默认创建 docker0 网桥，并通过虚拟网络接口对容器和 docker0 网桥，这样主机上的所有容器就处在一个二层网络中。</p>
+<p><img src="/source/images/Bridge 网络模式.png" alt="Bridge 网络模式"></p>
+<p><strong>Host 网络模式</strong></p>
+<p>Host（主机）网络模式下，Docker 服务启动容器时并不会为容器创建一个隔离的网络环境，容器将会被加入主机所在网络，共享主机的网络命名空间（/var/run/docker/nets/default）。其网络配置（网络地址、路由表和Iptables等）和主机保持一致，容器通过主机的网卡和 IP，实现与外部的通信。</p>
+<p>由于容器并没有独立的网络命名空间，容器服务的端口没有经过端口映射就直接暴露在主机上，因此容器中的端口号不能与主机上已经使用的端口号冲突。</p>
+<p>以这种网络模式创建的容器虽然可以访问主机的所有网络接口，但除非在特权模式下部署，否则容器可能不会重新配置主机的网络堆栈。Host 网络模式是 Apache Mesos 中默认使用的网络模式，如果没有指定网络类型，新的网络命名空间将不会与容器相关联，而是与主机网络相关联。</p>
+<p><img src="/source/images/Host 网络模式.png" alt="Host 网络模式"></p>
+<p><strong>Container 网络模式</strong></p>
+<p>Container （容器）网络模式比较特殊，新创建的容器和已经存在某个容器共享同一个命名空间。该新容器不会创建自己的网卡或配置自己的 IP，而是和一个指定容器共享 IP、端口范围等。</p>
+<p>这两个容器只有网络方面共享数据，文件系统、进程列表等其他方面还是隔离的。两个容器的进程可以通过loopback 网卡通信。</p>
+<p><img src="/source/images/Container 网络模式.png" alt="Container 网络模式"></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://liangyuewei.com/2019/08/12/Docker-基础/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://liangyuewei.com/2019/08/12/Docker-基础/&text=Docker 基础"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://liangyuewei.com/2019/08/12/Docker-基础/&title=Docker 基础"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://liangyuewei.com/2019/08/12/Docker-基础/&is_video=false&description=Docker 基础"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Docker 基础&body=Check out this article: http://liangyuewei.com/2019/08/12/Docker-基础/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://liangyuewei.com/2019/08/12/Docker-基础/&title=Docker 基础"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://liangyuewei.com/2019/08/12/Docker-基础/&title=Docker 基础"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://liangyuewei.com/2019/08/12/Docker-基础/&title=Docker 基础"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://liangyuewei.com/2019/08/12/Docker-基础/&title=Docker 基础"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://liangyuewei.com/2019/08/12/Docker-基础/&name=Docker 基础&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Yuewei.Liang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-86660611-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
