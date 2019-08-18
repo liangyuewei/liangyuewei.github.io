@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="理解一个程序的总体功能，而不是分析每一条指令。时刻记住这一点，不要在细节上陷入困境。将精力集中在程序整体上是如何工作的，而不是它们是如何做每一件特定的事情。 0x01 全局与局部变量 全局变量可以被一个程序中的任意函数访问和使用。局部变量只能在它被定义的函数中访问。 两个全局变量的简单程序例子：  123456int x = 1;int y = 2;void main()&amp;#123;   x =">
+<meta name="keywords" content="汇编">
+<meta property="og:type" content="article">
+<meta property="og:title" content="汇编中的 C 代码结构">
+<meta property="og:url" content="http://liangyuewei.com/2019/08/18/汇编中的-C-代码结构/index.html">
+<meta property="og:site_name" content="Yuewei.Liang">
+<meta property="og:description" content="理解一个程序的总体功能，而不是分析每一条指令。时刻记住这一点，不要在细节上陷入困境。将精力集中在程序整体上是如何工作的，而不是它们是如何做每一件特定的事情。 0x01 全局与局部变量 全局变量可以被一个程序中的任意函数访问和使用。局部变量只能在它被定义的函数中访问。 两个全局变量的简单程序例子：  123456int x = 1;int y = 2;void main()&amp;#123;   x =">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-08-18T04:38:35.947Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="汇编中的 C 代码结构">
+<meta name="twitter:description" content="理解一个程序的总体功能，而不是分析每一条指令。时刻记住这一点，不要在细节上陷入困境。将精力集中在程序整体上是如何工作的，而不是它们是如何做每一件特定的事情。 0x01 全局与局部变量 全局变量可以被一个程序中的任意函数访问和使用。局部变量只能在它被定义的函数中访问。 两个全局变量的简单程序例子：  123456int x = 1;int y = 2;void main()&amp;#123;   x =">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>汇编中的 C 代码结构</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2019/08/12/Docker-基础/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://liangyuewei.com/2019/08/18/汇编中的-C-代码结构/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://liangyuewei.com/2019/08/18/汇编中的-C-代码结构/&text=汇编中的 C 代码结构"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://liangyuewei.com/2019/08/18/汇编中的-C-代码结构/&title=汇编中的 C 代码结构"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://liangyuewei.com/2019/08/18/汇编中的-C-代码结构/&is_video=false&description=汇编中的 C 代码结构"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=汇编中的 C 代码结构&body=Check out this article: http://liangyuewei.com/2019/08/18/汇编中的-C-代码结构/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://liangyuewei.com/2019/08/18/汇编中的-C-代码结构/&title=汇编中的 C 代码结构"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://liangyuewei.com/2019/08/18/汇编中的-C-代码结构/&title=汇编中的 C 代码结构"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://liangyuewei.com/2019/08/18/汇编中的-C-代码结构/&title=汇编中的 C 代码结构"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://liangyuewei.com/2019/08/18/汇编中的-C-代码结构/&title=汇编中的 C 代码结构"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://liangyuewei.com/2019/08/18/汇编中的-C-代码结构/&name=汇编中的 C 代码结构&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        汇编中的 C 代码结构
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Yuewei.Liang</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-08-18T04:37:30.000Z" itemprop="datePublished">2019-08-18</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/汇编/">汇编</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>理解一个程序的总体功能，而不是分析每一条指令。时刻记住这一点，不要在细节上陷入困境。将精力集中在程序整体上是如何工作的，而不是它们是如何做每一件特定的事情。</p>
+<p><strong>0x01 全局与局部变量</strong></p>
+<p>全局变量可以被一个程序中的任意函数访问和使用。局部变量只能在它被定义的函数中访问。</p>
+<p>两个全局变量的简单程序例子：</p>
+<hr>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> x = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">int</span> y = <span class="number">2</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">   x = x + y;</span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">"Total = %d\n"</span>, x);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>全局变量的汇编代码。全局变量 x 通过 dword_40CF60 来标记，eax 的值被赋给 dword_40CF60。</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">00401003	mov 	eax, dword_40CF60</span><br><span class="line">00401008	add		eax, dword_40C000</span><br><span class="line">0040100E	mov		dword_40CF60, eax</span><br><span class="line">00401013	mov		ecx, dword_40CF60</span><br><span class="line">00401019	push 	ecx</span><br><span class="line">0040101A	push	offset offset aTotalD;&quot;total = %d\n&quot;</span><br><span class="line">0040101F	call	printf</span><br></pre></td></tr></table></figure>
+<hr>
+<p>两个局部变量的简单程序例子</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">void main()&#123;</span><br><span class="line">   int x = 1;</span><br><span class="line">   int y = 2;</span><br><span class="line">   x = x + y;</span><br><span class="line">   printf(&quot;Total = %d\n&quot;, x);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>局部变量的汇编代码（未经标记）。局部变量 x 位于栈上一个相对 ebp 的常量偏移处。</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">00401006	mov		dword ptr [ebp-4], 1</span><br><span class="line">0040100D	mov		dword ptr [ebp-8], 2</span><br><span class="line">00401014	mov		eax, [ebp-4]</span><br><span class="line">00401017	add		eax, [ebp-8]</span><br><span class="line">0040101A	mov		[ebp-4], eax</span><br><span class="line">0040101D	mov		ecx, [ebp-4]</span><br><span class="line">00401020	push	ecx</span><br><span class="line">00401021	push	offset aTotalD;&quot;total = %d\n&quot;</span><br><span class="line">00401026	call	printf</span><br></pre></td></tr></table></figure>
+<hr>
+<p>局部变量的汇编代码（经过标记）</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">00401006	mov		[ebp+var_4], 0</span><br><span class="line">0040100D	mov		[ebp_var_8], 1</span><br><span class="line">00401014	mov		eax, [ebp+var_4]</span><br><span class="line">00401017	add		eax, [ebp+var_8]</span><br><span class="line">0040101A	mov		[ebp+var_4], eax</span><br><span class="line">0040101D	mov		ecx, [ebp+var_4[</span><br><span class="line">00401020	push	ecx</span><br><span class="line">00401021	push	offset aTotalD;&quot;total=%d\n&quot;</span><br><span class="line">00401026	call	printf</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>0x02 反汇编算术操作</strong></p>
+<p>两个变量和一些算术操作的 C 代码</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">int a = 0;</span><br><span class="line">int b = 1;</span><br><span class="line">a = a + 11;</span><br><span class="line">a = a - b;</span><br><span class="line">a--;</span><br><span class="line">b++;</span><br><span class="line">b = a % 3;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>算术操作的汇编代码</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">00401006	mov	[ebp+var_4], 0</span><br><span class="line">0040100D	mov	[ebp+var_8], 1</span><br><span class="line">00401014	mov	eax, [ebp+var_4]</span><br><span class="line">00401017	add	eax, 0Bh</span><br><span class="line">0040101A	mov	[ebp+var_4], eax</span><br><span class="line">0040101D	mov	ecx, [ebp+var_4]</span><br><span class="line">00401020	sub	ecx, [ebp+var_8]</span><br><span class="line">00401023	mov	[ebp+var_4], ecx</span><br><span class="line">00401026	mov	edx, [ebp+var_4]</span><br><span class="line">00401029	sub	edx, 1</span><br><span class="line">0040102C	mov	[ebp+var_4], edx</span><br><span class="line">0040102F	mov	eax, [ebp+var_8]</span><br><span class="line">00401032	add	eax, 1</span><br><span class="line">00401035	mov	[ebp+var_8], eax</span><br><span class="line">00401038	mov	eax, [ebp+var_4]</span><br><span class="line">0040103B	cdq</span><br><span class="line">0040103C	mov	ecx, 3</span><br><span class="line">00401041	idiv	ecx</span><br><span class="line">00401043	mov	[ebp+var_8], edx</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>0x03 if 语句</strong></p>
+<p>if 语句简单例子</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">int x = 1;</span><br><span class="line">int y = 2;</span><br><span class="line">if(x == y)&#123;</span><br><span class="line">   printf(&quot;x equals y.\n&quot;);</span><br><span class="line">&#125;else&#123;</span><br><span class="line">   printf(&quot;x is not equal to y.\n&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>if语句汇编代码。使用 cmp 判断是否跳转。</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">00401006	mov	[ebp+var_8], 1</span><br><span class="line">0040100D	mov	[ebp+var_4], 2</span><br><span class="line">00401014	mov	eax, [ebp+var_8]</span><br><span class="line">00401017	cmp	eax, [ebp+var_4]</span><br><span class="line">0040101A	jnz	short loc_40102B</span><br><span class="line">0040101C	push	offset aXEqualsY_;&quot;x equals y.\n&quot;</span><br><span class="line">00401021	call	printf</span><br><span class="line">00401026	add	esp, 4</span><br><span class="line">00401029	jmp 	short loc_401038</span><br><span class="line">0040102B	loc_40102B:</span><br><span class="line">0040102B	push offset aXIsNotEqualToY;&quot;x is not equal to y.\n&quot;</span><br><span class="line">00401030	call	printf</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>0x04 嵌套的 if 语句</strong></p>
+<p>一个嵌套 if 语句</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">int x = 0;</span><br><span class="line">int y = 1;</span><br><span class="line">int z = 2;</span><br><span class="line">if(x == y ) &#123;</span><br><span class="line">    if(z == 0) &#123;</span><br><span class="line">        printf(&quot;z is zero and x = y.\n&quot;);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        printf(&quot;z is non-zero and x = y.\n&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    if(z == 0)&#123;</span><br><span class="line">        printf(&quot;z zero and x != y.\n&quot;);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        printf(&quot;z non-zero and x != y.\n&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>嵌套 if 语句例子的汇编代码</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">00401006	mov	[ebp+var_8], 0</span><br><span class="line">0040100D	mov	[ebp+var_4], 1</span><br><span class="line">00401014	mov	[ebp+var_C], 2</span><br><span class="line">0040101B	mov	eax, [ebp+var_8]</span><br><span class="line">0040101E	mov	eax, [ebp+var_4]</span><br><span class="line">00401021	cmp	short loc_401047</span><br><span class="line">00401023	jnz	[ebp+var_C], 0</span><br><span class="line">00401029	push	offset aZIsZeroAndXY_; &quot;z is zero and x = y.\n&quot;</span><br><span class="line">0040102E	call	printf</span><br><span class="line">00401033	add	esp, 4</span><br><span class="line">00401036	jmp, short loc_401045</span><br><span class="line">00401038	loc_401038:</span><br><span class="line">00401038	push offset aZIsNonZeroAndX; &quot;z is non-zero and x = y.\&quot;</span><br><span class="line">0040103D	call	printf</span><br><span class="line">00401042	add	esp, 4</span><br><span class="line">00401045	loc_401045:</span><br><span class="line">00401045	jmp 	short loc_401069</span><br><span class="line">00401047	loc_401047:</span><br><span class="line">00401047	cmp	[ebp+var_C], 0</span><br><span class="line">0040104B	jnz	short loc_40105C</span><br><span class="line">0040104D	push	offset aZZeroAndXY_; &quot;z zero and x != y.\n&quot;</span><br><span class="line">00401052	call 	printf</span><br><span class="line">00401057	add	esp, 4</span><br><span class="line">0040105A	jmp	short loc_401069</span><br><span class="line">0040105C	loc_40105C:</span><br><span class="line">0040105C	push	offset aZNonZeroAndXY_;&quot;z non-zero and x != y.\n&quot;</span><br><span class="line">00401061	call	printf00401061</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>0x05 for 循环</strong></p>
+<p>for 循环例子</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">int i;</span><br><span class="line">for(i=0; i&lt;100;i++)&#123;</span><br><span class="line">    printf(&quot;i equals %d\n&quot;, i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>for 循环汇编代码</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">00401004	mov	[ebp+var_4], 0</span><br><span class="line">0040100B	jmp	short loc_401016</span><br><span class="line">0040100D	loc_40100D:</span><br><span class="line">0040100D	mov	eax, [ebp+var_4]</span><br><span class="line">00401010	add	eax, 1</span><br><span class="line">00401013	mov	[ebp+var_4], eax</span><br><span class="line">00401016 	loc_401016:</span><br><span class="line">00401016	cmp	[ebp+var_4], 64h</span><br><span class="line">0040101A	jge	short loc_40102F</span><br><span class="line">0040101C	mov	ecx, [ebp+var_4]</span><br><span class="line">0040101F	push	ecx</span><br><span class="line">00401020	push	offset aID; &quot;i equals %d\n&quot;</span><br><span class="line">00401025	call	printf</span><br><span class="line">0040102A	add	esp, 8</span><br><span class="line">0040102D	jmp	short loc_40100D</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>0x06 while 循环</strong></p>
+<p>while 循环的例子</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">int status = 0;</span><br><span class="line">int result = 0;</span><br><span class="line">while (status == 0)&#123;</span><br><span class="line">    result = perforActionn();</span><br><span class="line">    status = checkResult(result);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>while 循环汇编代码</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">00401036	mov	[ebp+var_4], 0</span><br><span class="line">0040103D	mov	[ebp+var_8], 0</span><br><span class="line">00401044	loc_401044:</span><br><span class="line">00401044	cmp [ebp+var_4], 0</span><br><span class="line">00401048	jnz	short loc_401063</span><br><span class="line">0040104A	call	performAction</span><br><span class="line">0040104F	mov	[ebp+var_8], eax</span><br><span class="line">00401052	mov	eax, [ebp+var_8]</span><br><span class="line">00401055	push	eax</span><br><span class="line">00401056	call	checkResult</span><br><span class="line">0040105B	add	esp, 4</span><br><span class="line">0040105E	mov	[ebp+var_4], eax</span><br><span class="line">00401061	jmp	short loc_401044</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>0x07 函数调用约定</strong></p>
+<ol>
+<li>cdecl 约定中，参数是从右到左被压入栈，当函数完成时由调用者清理栈，并且返回保存在 EAX 中</li>
+</ol>
+<p>cdecl 函数调用</p>
+<hr>
+<p>push   c</p>
+<p>push   b</p>
+<p>push   a</p>
+<p>call   test</p>
+<p>add    esp, 2</p>
+<p>mov    ret, eax</p>
+<hr>
+<ol start="2">
+<li>stdcall约定除了被调用者在函数完成时清理栈之外，其他和 cdecl 类似</li>
+</ol>
+<p>srdcall 是 Windows API 的标准调用约定。任何调用这些 API 都不需要清理栈，因为清理栈的责任是有实现 API 函数代码的 DLL 程序所承担。</p>
+<ol start="3">
+<li>fastcalt 约定中，前一些参数（典型的是前两个）被传到寄存器中，备用的寄存器是 EDX 和 ECX。</li>
+</ol>
+<p><strong>0x08 switch 语句</strong></p>
+<p>switch 语句通常以两种方式被编译：使用 if 样式或使用跳转表</p>
+<p>1） if 样式</p>
+<p>一个有 3 个选项的 switch 语句</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">switch(i)&#123;</span><br><span class="line">   case 1:</span><br><span class="line">       printf(&quot;i = %d&quot;, i+1);</span><br><span class="line">       break;</span><br><span class="line">   case 2:</span><br><span class="line">       printf(&quot;i = %d&quot;, i+2);</span><br><span class="line">       break;</span><br><span class="line">   case 3:</span><br><span class="line">       printf(&quot;i = %d&quot;, i+3);</span><br><span class="line">       break;</span><br><span class="line">   default:</span><br><span class="line">       break;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>汇编代码</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">00401013	cmp	[ebp+var_8], 1</span><br><span class="line">00401017	jz	short loc_401027</span><br><span class="line">00401019	cmp	[ebp+var_8], 2</span><br><span class="line">0040101D	jz	[short loc_40103D</span><br><span class="line">0040101F	cmp	[ebp+var_8], 3</span><br><span class="line">00401023	jz	short loc_401053</span><br><span class="line">00401025	jmp	short loc_401067</span><br><span class="line">00401027	loc_401027</span><br><span class="line">00401027	mov	ecx, [ebp+var_4]</span><br><span class="line">0040102A	add	ecx, 1</span><br><span class="line">0040102D	push	ecx</span><br><span class="line">0040102E	push	offset unk_40C000; i = %d</span><br><span class="line">00401033	call	printf</span><br><span class="line">00401038	add	esp, 8</span><br><span class="line">0040103B	jmp	short loc_401067</span><br><span class="line">0040103D	loc_40103D:</span><br><span class="line">0040103D	mov	edx, [ebp+var_4]</span><br><span class="line">00401040	add	edx, 2</span><br><span class="line">00401043	push	edx</span><br><span class="line">00401044	push	offset unk_40C004; i = %d</span><br><span class="line">00401049	call	printf</span><br><span class="line">0040104E	add	esp, 8</span><br><span class="line">00401051	jmp	short loc_401067</span><br><span class="line">00401053	loc_401053:</span><br><span class="line">00401053	mov	eax, [ebp+var_4]</span><br><span class="line">00401056	add	eax, 3</span><br><span class="line">00401059	push	eax</span><br><span class="line">0040105A	push	offset unk_40C008; i = %d</span><br><span class="line">0040105F	call	printf</span><br><span class="line">00401064	add	esp, 8</span><br></pre></td></tr></table></figure>
+<hr>
+<p>2) 跳转表</p>
+<p>一个有 4 个选项的 switch 语句</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">switch(i)&#123;</span><br><span class="line">   case 1:</span><br><span class="line">       printf(&quot;i = %d&quot;, i+1);</span><br><span class="line">       break;</span><br><span class="line">   case 2:</span><br><span class="line">       printf(&quot;i = %d&quot;, i+2);</span><br><span class="line">       break;</span><br><span class="line">   case 3:</span><br><span class="line">       printf(&quot;i = %d&quot;, i+3);</span><br><span class="line">       break;</span><br><span class="line">   case 4:</span><br><span class="line">       printf(&quot;i = %d&quot;, i+3);</span><br><span class="line">       break;</span><br><span class="line">   default:</span><br><span class="line">       break;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>汇编代码</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">00401016 	sub	ecx, 1</span><br><span class="line">00401019	mov	[ebp+var_8], ecx</span><br><span class="line">0040101C	cmp	[ebp+var_8], 3</span><br><span class="line">00401020	ja	short loc_401082</span><br><span class="line">00401022	mov	edx, [ebp+var_8]</span><br><span class="line">00401025	jmp	ds:off_401088[edx*4]</span><br><span class="line">0040102C	loc_40102C:</span><br><span class="line">	......</span><br><span class="line"></span><br><span class="line">00401040	jmp	short loc_401082</span><br><span class="line">00401042	loc_401042:</span><br><span class="line">	......</span><br><span class="line">00401056	jmp short loc_401082</span><br><span class="line">00401058	loc_401058:</span><br><span class="line">  ......</span><br><span class="line">0040106C	jmp	short loc_401082</span><br><span class="line">0040106E	loc_40106E:</span><br><span class="line">	......</span><br><span class="line">00401082	loc_401082:</span><br><span class="line">00401082	xor	eax, eax</span><br><span class="line">00401084	mov	esp, ebp</span><br><span class="line">00401086	pop	ebp</span><br><span class="line">00401087	rent</span><br><span class="line">00401087	_main	endp</span><br><span class="line">00401088	off_401088	dd offset loc_40102C</span><br><span class="line">0040108C		dd offset loc_401042</span><br><span class="line">00401090		dd offset loc_401058</span><br><span class="line">00401094		dd offset loc_40106E</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>0x09 反汇编数组</strong></p>
+<p>一个数组的例子</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">int b[5] = &#123;123, 87, 487, 7, 978&#125;</span><br><span class="line">void main()&#123;</span><br><span class="line">    int i;</span><br><span class="line">    int a[5];</span><br><span class="line">    for (i=0; i&lt;5; i++)&#123;</span><br><span class="line">        a[i] = i;</span><br><span class="line">        b[i] = i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>汇编代码，数组通过使用一个基地址作为起始点来进行访问。</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">00401006	mov 	[ebp+var_8], 0</span><br><span class="line">0040100D	jmp	short loc_401018</span><br><span class="line">0040100F	loc_40100F:</span><br><span class="line">0040100F	mov eax, [ebp+var_8]</span><br><span class="line">00401012	add	eax, [ebp+var_8]</span><br><span class="line">00401015	mov	[ebp+var_8], eax</span><br><span class="line">00401018	loc_401018:</span><br><span class="line">00401018	cmp	[ebp+var_8], eax</span><br><span class="line">0040101C	jge	short loc_401037</span><br><span class="line">0040101E	mov	ecx, [ebp+var_8]</span><br><span class="line">00401021	mov	edx, [ebp+var_8]</span><br><span class="line">00401024	mov	[ebp+ecx*4+var_4], edx</span><br><span class="line">00401028	mov	eax, [ebp+var_8]</span><br><span class="line">0040102B	mov	ecx, [ebp+var_8]</span><br><span class="line">0040102E	mov	dword_40A000[ecx*4], eax</span><br><span class="line">00401035	jmp	short loc_40100F</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>0x10 结构体</strong></p>
+<p>一个结构体的例子</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">struct my_structure &#123;</span><br><span class="line">    int x[5];</span><br><span class="line">    char y;</span><br><span class="line">    double z;</span><br><span class="line">&#125;;</span><br><span class="line">struct my_structure *gms;</span><br><span class="line">void test(struct my_structure *q)</span><br><span class="line">&#123;</span><br><span class="line">    int i;</span><br><span class="line">    q -&gt; y = &apos;a&apos;;</span><br><span class="line">    q -&gt;z = 15.6;</span><br><span class="line">    for (i=0; i&lt;5; i++)&#123;</span><br><span class="line">        q -&gt;x[i] = i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">void main()&#123;</span><br><span class="line">    gms = (struct my_structure *) malloc(sizeof(struct my_structure));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>汇编代码</p>
+<p>结构体中 main 函数汇编代码</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">00401050	push	ebp</span><br><span class="line">00401051	mov	ebp, esp</span><br><span class="line">00401053	push	20h</span><br><span class="line">00401055	call	malloc</span><br><span class="line">0040105A	add	esp, 4</span><br><span class="line">0040105D	mov	dword_40EA30, eax</span><br><span class="line">00401062	mov	eax, dword_40EA30</span><br><span class="line">00401067	push	eax</span><br><span class="line">00401068	call	sub_401000</span><br><span class="line">0040106D	add	esp, 4</span><br><span class="line">00401070	xor	eax, eax</span><br><span class="line">00401072	pop	ebp</span><br><span class="line">00401073	retn</span><br></pre></td></tr></table></figure>
+<hr>
+<p>结构体中 test 函数的汇编代码</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">00401000	push	ebp</span><br><span class="line">00401001	mov	ebp, esp</span><br><span class="line">00401003	push	ecx</span><br><span class="line">00401004	mov	eax, [ebp+arg_0]</span><br><span class="line">00401007	mov	byte ptr [eax+14h], 61h</span><br><span class="line">0040100B	mov	ecx, [ebp+arg_0]</span><br><span class="line">0040100E	fld	ds:dbl_40B120</span><br><span class="line">00401014	fstp 	qword ptr [ecx+18h]</span><br><span class="line">00401017	mov	[ebp+var_4], 0</span><br><span class="line">0040101E	jmp	short loc_401029</span><br><span class="line">00401020	loc_401020:</span><br><span class="line">00401020	mov	edp, [ebp+var_4]</span><br><span class="line">00401023	add	edx, 1</span><br><span class="line">00401026	mov	[ebp+var_4], edx</span><br><span class="line">00401029	loc_401029:</span><br><span class="line">00401029	cmp	[ebp+var_4], 5</span><br><span class="line">0040102D	jge	short  loc_40103D</span><br><span class="line">0040103F	mov	eax, [ebp+var_4]</span><br><span class="line">00401032	mov	ecx, [ebp+arg_0]</span><br><span class="line">00401035	mov	edx, [ebp+var_4]</span><br><span class="line">00401038	mov	[ecx+eax*4], edx</span><br><span class="line">0040103B	jmp	short loc_401020</span><br><span class="line">0040103D	loc_40103D:</span><br><span class="line">0040103D	mov	esp, ebp</span><br><span class="line">00401040	retn</span><br></pre></td></tr></table></figure>
+<p><strong>0x11 链表遍历</strong></p>
+<p>链表遍历的例子</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">struct node</span><br><span class="line">&#123;</span><br><span class="line">    int x;</span><br><span class="line">    struct node *next;</span><br><span class="line">&#125;;</span><br><span class="line">typedef struct node pnode;</span><br><span class="line">void main()&#123;</span><br><span class="line">   pnode *curr, *head;</span><br><span class="line">   int i;</span><br><span class="line">   head = NULL;</span><br><span class="line">   for ( i=1; i&lt;=10;i++)&#123;</span><br><span class="line">       curr = (pnode *)malloc(sizeof(pnode));</span><br><span class="line">       curr -&gt;x = i;</span><br><span class="line">       curr -&gt;next = head;</span><br><span class="line">       head = curr;</span><br><span class="line">   &#125;</span><br><span class="line">   curr = head;</span><br><span class="line">   while (curr)</span><br><span class="line">   &#123;</span><br><span class="line">       printf(&quot;%d\n&quot;, curr-&gt;x);</span><br><span class="line">       curr = curr-&gt;next;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>链表遍历汇编代码</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">0040106A	mov	[ebp+var_8], 0</span><br><span class="line">00401071	mov	[ebp+var_C], 1</span><br><span class="line">00401078 	loc_401078:</span><br><span class="line">00401078	cmp	[ebp+var_C], 0Ah</span><br><span class="line">0040107C	jg	short loc)4010AB</span><br><span class="line">0040107E	mov	[esp+18h+var_18], 8</span><br><span class="line">00401085	call	malloc</span><br><span class="line">0040108A	mov	[ebp+var_4], eax</span><br><span class="line">0040108D	mov	edx, [ebp+var_4]</span><br><span class="line">00401090	mov	eax, [ebp+var_C]</span><br><span class="line">00401093	mov	[edx], eax</span><br><span class="line">00401095	mov	edx, [ebp+var_4]</span><br><span class="line">00401098	mov	eax, [ebp+var_8]</span><br><span class="line">0040109B	mov	[edx+4], eax</span><br><span class="line">0040109E	mov	eax, [ebp+var_4]</span><br><span class="line">004010A1	mov	[ebp+var_8], eax</span><br><span class="line">004010A4	lea	eax, [ ebp+var_C]</span><br><span class="line">004010A7	inc	dword ptr [eax]</span><br><span class="line">004010A9	jmp	short loc_401078</span><br><span class="line">004010AB	loc_4010AB:</span><br><span class="line">004010AB	mov	eax, [ebp+var_8]</span><br><span class="line">004010AE	mov	[ebp+var_4], eax</span><br><span class="line">004010B1 	loc_4010B1:</span><br><span class="line">004010B1	cmp	[ebp+var_4], 1</span><br><span class="line">004010B5	jz	short locret_4010D7</span><br><span class="line">004010B7	mov	eax, [ebp+var_4]</span><br><span class="line">004010BA	mov	eax, [eax]</span><br><span class="line">004010BC	mov	[esp+18h+var_14], eax</span><br><span class="line">004010C0	mov	[esp+18h+var_18], offset aD; &quot;%d\n&quot;</span><br><span class="line">004010C7	call	printf</span><br><span class="line">004010CC	mov	eax, [ebp+var_4]</span><br><span class="line">004010CF	mov	eax, [eax + 4]</span><br><span class="line">004010D2	mov	[ebp+var_4], eax</span><br><span class="line">004010D5	jmp	short loc_4010B1</span><br></pre></td></tr></table></figure>
+<hr>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://liangyuewei.com/2019/08/18/汇编中的-C-代码结构/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://liangyuewei.com/2019/08/18/汇编中的-C-代码结构/&text=汇编中的 C 代码结构"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://liangyuewei.com/2019/08/18/汇编中的-C-代码结构/&title=汇编中的 C 代码结构"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://liangyuewei.com/2019/08/18/汇编中的-C-代码结构/&is_video=false&description=汇编中的 C 代码结构"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=汇编中的 C 代码结构&body=Check out this article: http://liangyuewei.com/2019/08/18/汇编中的-C-代码结构/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://liangyuewei.com/2019/08/18/汇编中的-C-代码结构/&title=汇编中的 C 代码结构"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://liangyuewei.com/2019/08/18/汇编中的-C-代码结构/&title=汇编中的 C 代码结构"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://liangyuewei.com/2019/08/18/汇编中的-C-代码结构/&title=汇编中的 C 代码结构"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://liangyuewei.com/2019/08/18/汇编中的-C-代码结构/&title=汇编中的 C 代码结构"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://liangyuewei.com/2019/08/18/汇编中的-C-代码结构/&name=汇编中的 C 代码结构&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Yuewei.Liang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-86660611-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

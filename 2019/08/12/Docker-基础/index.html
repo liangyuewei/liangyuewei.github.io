@@ -20,7 +20,7 @@
 <meta property="og:image" content="http://liangyuewei.com/images/Bridge%20网络模式.png">
 <meta property="og:image" content="http://liangyuewei.com/images/Host%20网络模式.png">
 <meta property="og:image" content="http://liangyuewei.com/images/Container%20网络模式.png">
-<meta property="og:updated_time" content="2019-08-13T00:37:11.094Z">
+<meta property="og:updated_time" content="2019-08-13T00:41:25.786Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker 基础">
 <meta name="twitter:description" content="镜像介绍 镜像是容器运行的基础，容器引擎服务可使用不同的镜像启动相应的容器。 镜像是由按层封装好的文件系统和描述镜像的元数据构成的文件系统包，包含应用所需要的系统、环境、配置和应用本身等。镜像由开发者构建好之后上传至镜像仓库，使用者获取镜像之后就可以使用镜像直接构建自己应用。 与虚拟机所用的系统镜像不同，容器镜像不仅没有Linux内核，同时在格式上也有很大的区别。虚拟机是将一个完整系统封装成一个镜">
@@ -77,6 +77,8 @@
     <br>
     <span id="actions">
       <ul>
+        
+        <li><a class="icon" href="/2019/08/18/汇编中的-C-代码结构/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
         <li><a class="icon" href="/2019/08/12/【转载】软件测试之测试用例颗粒度问题/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
@@ -204,7 +206,7 @@
 <ol start="2">
 <li>docker import </li>
 </ol>
-<p>将 容器从本地以镜像的方式导入</p>
+<p>将容器从本地以镜像的方式导入</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># docker import -m import-redis redis.tar</span><br></pre></td></tr></table></figure>
 <ol start="3">
 <li>docker save</li>
@@ -286,9 +288,9 @@
 <p><strong>Linux 网桥</strong></p>
 <p>Linux 网桥是 Linux 系统中虚拟网桥，它可以将不同主机的网络接口连接，从而实现主机间的通信。</p>
 <p>Docker启动后，会默认创建名为 docker0 的 Linux 网桥。在未创建任何容器时，可以看到 docker0 网桥没有接口连接。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># brctl show</span><br><span class="line">bridge name   	 bridge id           	    	STP enabled         interfaces</span><br><span class="line">docker0     		 8000.0242d1837f60      		no</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># brctl show</span><br><span class="line">bridge name		bridge id		STP enabled         interfaces</span><br><span class="line">docker0		8000.0242d1837f60		no</span><br></pre></td></tr></table></figure>
 <p>当创建容器时（d45faaddb528），Docker会为容器创建虚拟网络接口，并将其连接到 Docker0网桥上。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># brctl show</span><br><span class="line">bridge name 			bridge id 						STP 					enabled interfaces</span><br><span class="line">docker0 					8000.0242f22b2de4 	  no						veth4d91464</span><br><span class="line">																										  veth6ed0a8c</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># brctl show</span><br><span class="line">bridge name		bridge id		STP		enabled interfaces</span><br><span class="line">docker0		8000.0242f22b2de4		no		veth4d91464</span><br><span class="line">								veth6ed0a8c</span><br></pre></td></tr></table></figure>
 <p><strong>虚拟网络接口对</strong></p>
 <p>为了实现容器与宿主机网络、外部网络之间的通信，需要通过虚拟网络接口对将容器与 Linux 网桥连接。</p>
 <p>当 Docker 启动一个容器时，会创建一个虚拟网络接口对，即两个相连的虚拟网络接口。其中一个连接容器，成为容器的网卡 eth0；另一个被连接到 Docker0 网桥上，从而容器内部的数据包先后经过 eth0 和 vethxxx对到达 Docker0 网桥，实现在同一子网内不同容器之间的通信。</p>
