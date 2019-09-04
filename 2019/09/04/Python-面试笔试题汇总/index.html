@@ -14,7 +14,7 @@
 <meta property="og:site_name" content="Yuewei.Liang">
 <meta property="og:description" content="Python面试笔试题汇总 一行代码实现 1-100 之和 1sum(range(0,101))  如何在一个函数内部修改全局变量 使用global 修改全局变量 1234a = 5def fn():    global a    a = 4  列出 5 个 Python 标准库 12345OS:提供与操作系统相关的函数sys:用于命令行参数re:正则匹配math:数学运算detetime:处理日">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-09-04T14:42:51.366Z">
+<meta property="og:updated_time" content="2019-09-04T15:28:29.478Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python 面试笔试题汇总">
 <meta name="twitter:description" content="Python面试笔试题汇总 一行代码实现 1-100 之和 1sum(range(0,101))  如何在一个函数内部修改全局变量 使用global 修改全局变量 1234a = 5def fn():    global a    a = 4  列出 5 个 Python 标准库 12345OS:提供与操作系统相关的函数sys:用于命令行参数re:正则匹配math:数学运算detetime:处理日">
@@ -194,47 +194,67 @@
 <li><p>避免转义给字符串加哪个字母表示原始字符串？</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">r，表示需要原始字符串，不转义特殊字符</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>用正则匹配出标签里面的内容（“中国”），其中class的类名是不确定的</p>
+<li><p>\&lt;div class=”Nnda”> 中国\&lt;div>,用正则匹配出标签里面的内容（“中国”），其中class的类名是不确定的</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line">str = <span class="string">'&lt;div class="Nnda"&gt;中国&lt;/div&gt;'</span></span><br><span class="line">res = re.findall(<span class="string">r'&lt;div class=".*"(.*?)&lt;/div&gt;'</span>,str)</span><br><span class="line"><span class="keyword">print</span> res</span><br></pre></td></tr></table></figure>
 </li>
+</ol>
+<ol start="17">
 <li><p>python中断言方法举例</p>
-</li>
-<li><p>数据表student有id,name,score,city字段，其中name中的名字可有重复，需要消除重复行,请写sql语句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">assert(a&gt;1)</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>python2和python3区别？列举5个</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1. Python3 中 print 是函数，Python2中是语句</span><br><span class="line">2. Python2 中 range(1,10)返回 列表，Python3 返回迭代器</span><br><span class="line">3. Python2 中使用ascii 编码，Python3 使用 utf-8编码</span><br><span class="line">4. Python2 中 Unicode 表示字符串序列，str 表示字节序列</span><br><span class="line">	 Python3 中 str 表示字符串序列，byte表示字节序列</span><br><span class="line">5. Python2 中是 raw_input()函数，Python3中是 input 函数</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>列出python中可变数据类型和不可变数据类型，并简述原理</p>
 </li>
 <li><p>s = “ajldjlajfdljfddd”，去重并从小到大排序输出”adfjl”</p>
 </li>
 <li><p>用lambda函数实现两个数相乘</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sum = <span class="keyword">lambda</span> a,b: a*b</span><br><span class="line">print(sum(<span class="number">5</span>,<span class="number">4</span>))</span><br></pre></td></tr></table></figure>
 </li>
+</ol>
+<ol start="22">
 <li><p>字典根据键从小到大排序dict={“name”:”zs”,”age”:18,”city”:”深圳”,”tel”:”1362626627”}</p>
 </li>
 <li><p>利用collections库的Counter方法统计字符串每个单词出现的次数”kjalfj;ldsjafl;hdsllfdhg;lahfbl;hl;ahlf;h”</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line">a = ”kjalfj;ldsjafl;hdsllfdhg;lahfbl;hl;ahlf;h”</span><br><span class="line">res = Counter(a)</span><br><span class="line">print(res)</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>字符串a = “not 404 found 张三 99 深圳”，每个词中间是空格，用正则过滤掉英文和数字，最终输出”张三 深圳”</p>
 </li>
 <li><p>filter方法求出列表所有奇数并构造新列表，a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>]</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fn</span><span class="params">(a)</span>:</span></span><br><span class="line">	<span class="keyword">return</span> a%<span class="number">2</span>==<span class="number">1</span></span><br><span class="line">newlist = filter(fn, a)</span><br><span class="line">newlist = [ i <span class="keyword">for</span> i <span class="keyword">in</span> newlist]</span><br><span class="line">print(newlist)</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>列表推导式求列表所有奇数并构造新列表，a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">res = [i <span class="keyword">for</span> i <span class="keyword">in</span> a <span class="keyword">if</span> a%<span class="number">2</span>==<span class="number">1</span>]</span><br><span class="line">print(res)</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>正则re.complie作用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">将正在编译为一个对象</span><br></pre></td></tr></table></figure>
 </li>
+</ol>
+<ol start="28">
 <li><p>a=（1，）b=(1)，c=(“1”) 分别是什么类型的数据？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tuple,int, str</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>两个列表[1,5,7,9]和[2,2,6,8]合并为[1,2,2,3,6,7,8,9]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">使用 extend 函数</span><br></pre></td></tr></table></figure>
 </li>
+</ol>
+<ol start="30">
 <li><p>用python删除文件和用linux命令删除文件方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Python: os.remove(文件名)</span><br><span class="line">Linux: rm 文件名</span><br></pre></td></tr></table></figure>
 </li>
+</ol>
+<ol start="31">
 <li><p>log日志中，我们需要用时间戳记录error,warning等的发生时间，请用datetime模块打印当前时间戳 “2018-04-01 11:38:54”</p>
 </li>
 <li><p>写一段自定义异常代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fn</span><span class="params">()</span>:</span></span><br><span class="line">	<span class="keyword">try</span>:</span><br><span class="line">		<span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>)</span><br><span class="line">			<span class="keyword">if</span> i&gt;<span class="number">2</span>:</span><br><span class="line">				<span class="keyword">raise</span> Exception(<span class="string">"dada"</span>)</span><br><span class="line">	<span class="keyword">except</span> Exception <span class="keyword">as</span> err:</span><br><span class="line">		print(err)</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>正则表达式匹配中，（.）和（.?）匹配区别？</p>
-</li>
-<li><p>简述Django的orm</p>
+<li><p>正则表达式匹配中，（.*）和（.?）匹配区别？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(.*)是贪婪匹配，会把满足正则尽可能对的往后匹配</span><br><span class="line">(.*?)是非贪婪匹配，会吧满足正则的尽可能少匹配</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>[[1,2],[3,4],[5,6]]一行代码展开该列表，得出[1,2,3,4,5,6]</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a = [[<span class="number">1</span>,<span class="number">2</span>],[<span class="number">3</span>,<span class="number">4</span>],[<span class="number">5</span>,<span class="number">6</span>]]</span><br><span class="line">x = [j <span class="keyword">for</span> i <span class="keyword">in</span> a <span class="keyword">for</span> j <span class="keyword">in</span> i]s</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>x=”abc”,y=”def”,z=[“d”,”e”,”f”],分别求出x.join(y)和x.join(z)返回的结果</p>
 </li>
