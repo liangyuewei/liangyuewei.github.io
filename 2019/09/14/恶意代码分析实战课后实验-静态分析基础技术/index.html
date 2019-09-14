@@ -6,17 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="description" content="title: 恶意代码分析实战课后实验-静态分析基础技术date: 2019-09-13 10:18:11tags: 恶意代码分析 Lab1-1问题  将文件上传至http://www.VirusTotal.com进行分析并查看报告。文件匹配到了已有的反病毒软件特征吗？   ​    可以看到有 40 款反病毒引擎报告文件为病毒文件  这些文件是什么时候编译的？ 在 PE结构中包含一个名为 IMA">
+    <meta name="description" content="Lab1-1 将文件上传至http://www.VirusTotal.com进行分析并查看报告。文件匹配到了已有的反病毒软件特征吗？   ​    可以看到有 40 款反病毒引擎报告文件为病毒文件  这些文件是什么时候编译的？ 在 PE结构中包含一个名为 IMAGE_FILE_HEADER 的结构，其中的 TimeDateStamp 用于保存文件的编译时间。所以可以使用 PETools 工具查看文">
+<meta name="keywords" content="恶意代码">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Yuewei.Liang">
-<meta property="og:url" content="http://liangyuewei.com/2019/09/13/恶意代码分析实战课后实验-静态分析基础技术/index.html">
+<meta property="og:title" content="恶意代码分析实战课后实验-静态分析基础技术">
+<meta property="og:url" content="http://liangyuewei.com/2019/09/14/恶意代码分析实战课后实验-静态分析基础技术/index.html">
 <meta property="og:site_name" content="Yuewei.Liang">
-<meta property="og:description" content="title: 恶意代码分析实战课后实验-静态分析基础技术date: 2019-09-13 10:18:11tags: 恶意代码分析 Lab1-1问题  将文件上传至http://www.VirusTotal.com进行分析并查看报告。文件匹配到了已有的反病毒软件特征吗？   ​    可以看到有 40 款反病毒引擎报告文件为病毒文件  这些文件是什么时候编译的？ 在 PE结构中包含一个名为 IMA">
+<meta property="og:description" content="Lab1-1 将文件上传至http://www.VirusTotal.com进行分析并查看报告。文件匹配到了已有的反病毒软件特征吗？   ​    可以看到有 40 款反病毒引擎报告文件为病毒文件  这些文件是什么时候编译的？ 在 PE结构中包含一个名为 IMAGE_FILE_HEADER 的结构，其中的 TimeDateStamp 用于保存文件的编译时间。所以可以使用 PETools 工具查看文">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://liangyuewei.com/images/MalwareAnalysis-Labs/lab1/virustotal_lab01-01.png">
-<meta property="og:image" content="http://liangyuewei.com/images/MalwareAnalysis-Labs/lab1/lab1-1Pe%20编译时间.png">
-<meta property="og:image" content="http://liangyuewei.com/images/MalwareAnalysis-Labs/lab1/lab1-1Pe%20加壳.png">
-<meta property="og:image" content="http://liangyuewei.com/images/MalwareAnalysis-Labs/lab1/lab1-1Pe%20导入信息.png">
+<meta property="og:image" content="http://liangyuewei.com/images/MalwareAnalysis-Labs/lab1/lab1-1Pe%20%E7%BC%96%E8%AF%91%E6%97%B6%E9%97%B4.png">
+<meta property="og:image" content="http://liangyuewei.com/images/MalwareAnalysis-Labs/lab1/lab1-1Pe%20%E5%8A%A0%E5%A3%B3.png">
+<meta property="og:image" content="http://liangyuewei.com/images/MalwareAnalysis-Labs/lab1/lab1-1Pe%20%E5%AF%BC%E5%85%A5%E4%BF%A1%E6%81%AF.png">
 <meta property="og:image" content="http://liangyuewei.com/images/MalwareAnalysis-Labs/lab1/lab1-1-5.png">
 <meta property="og:image" content="http://liangyuewei.com/images/MalwareAnalysis-Labs/lab1/lab1-1-6.png">
 <meta property="og:image" content="http://liangyuewei.com/images/MalwareAnalysis-Labs/lab1/lab1-2-1.png">
@@ -36,11 +37,11 @@
 <meta property="og:image" content="http://liangyuewei.com/images/MalwareAnalysis-Labs/lab1/lab1-4-3.png">
 <meta property="og:image" content="http://liangyuewei.com/images/MalwareAnalysis-Labs/lab1/lab1-4-4.png">
 <meta property="og:image" content="http://liangyuewei.com/images/MalwareAnalysis-Labs/lab1/lab1-4-5.png">
-<meta property="og:image" content="http://liangyuewei.com/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab1/lab1-4-8.png">
-<meta property="og:updated_time" content="2019-09-14T13:26:23.101Z">
+<meta property="og:image" content="http://liangyuewei.com/images/MalwareAnalysis-Labs/lab1/lab1-4-6.png">
+<meta property="og:updated_time" content="2019-09-14T13:42:46.192Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Yuewei.Liang">
-<meta name="twitter:description" content="title: 恶意代码分析实战课后实验-静态分析基础技术date: 2019-09-13 10:18:11tags: 恶意代码分析 Lab1-1问题  将文件上传至http://www.VirusTotal.com进行分析并查看报告。文件匹配到了已有的反病毒软件特征吗？   ​    可以看到有 40 款反病毒引擎报告文件为病毒文件  这些文件是什么时候编译的？ 在 PE结构中包含一个名为 IMA">
+<meta name="twitter:title" content="恶意代码分析实战课后实验-静态分析基础技术">
+<meta name="twitter:description" content="Lab1-1 将文件上传至http://www.VirusTotal.com进行分析并查看报告。文件匹配到了已有的反病毒软件特征吗？   ​    可以看到有 40 款反病毒引擎报告文件为病毒文件  这些文件是什么时候编译的？ 在 PE结构中包含一个名为 IMAGE_FILE_HEADER 的结构，其中的 TimeDateStamp 用于保存文件的编译时间。所以可以使用 PETools 工具查看文">
 <meta name="twitter:image" content="http://liangyuewei.com/images/MalwareAnalysis-Labs/lab1/virustotal_lab01-01.png">
     
     
@@ -61,7 +62,7 @@
         
     
     <!-- title -->
-    <title>Yuewei.Liang</title>
+    <title>恶意代码分析实战课后实验-静态分析基础技术</title>
     <!-- styles -->
     <link rel="stylesheet" href="/css/style.css">
     <!-- persian styles -->
@@ -95,10 +96,8 @@
     <span id="actions">
       <ul>
         
-        <li><a class="icon" href="/2019/09/14/恶意代码分析实战课后实验-动态分析基础技术/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
-        
-        <li><a class="icon" href="/2019/09/04/Python-面试笔试题汇总/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        <li><a class="icon" href="/2019/09/14/恶意代码分析实战课后实验-动态分析基础技术/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
         <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
@@ -111,16 +110,16 @@
     <br>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://liangyuewei.com/2019/09/13/恶意代码分析实战课后实验-静态分析基础技术/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=http://liangyuewei.com/2019/09/13/恶意代码分析实战课后实验-静态分析基础技术/&text="><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://liangyuewei.com/2019/09/13/恶意代码分析实战课后实验-静态分析基础技术/&title="><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://liangyuewei.com/2019/09/13/恶意代码分析实战课后实验-静态分析基础技术/&is_video=false&description="><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=&body=Check out this article: http://liangyuewei.com/2019/09/13/恶意代码分析实战课后实验-静态分析基础技术/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=http://liangyuewei.com/2019/09/13/恶意代码分析实战课后实验-静态分析基础技术/&title="><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=http://liangyuewei.com/2019/09/13/恶意代码分析实战课后实验-静态分析基础技术/&title="><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://liangyuewei.com/2019/09/13/恶意代码分析实战课后实验-静态分析基础技术/&title="><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=http://liangyuewei.com/2019/09/13/恶意代码分析实战课后实验-静态分析基础技术/&title="><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://liangyuewei.com/2019/09/13/恶意代码分析实战课后实验-静态分析基础技术/&name=&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://liangyuewei.com/2019/09/14/恶意代码分析实战课后实验-静态分析基础技术/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://liangyuewei.com/2019/09/14/恶意代码分析实战课后实验-静态分析基础技术/&text=恶意代码分析实战课后实验-静态分析基础技术"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://liangyuewei.com/2019/09/14/恶意代码分析实战课后实验-静态分析基础技术/&title=恶意代码分析实战课后实验-静态分析基础技术"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://liangyuewei.com/2019/09/14/恶意代码分析实战课后实验-静态分析基础技术/&is_video=false&description=恶意代码分析实战课后实验-静态分析基础技术"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=恶意代码分析实战课后实验-静态分析基础技术&body=Check out this article: http://liangyuewei.com/2019/09/14/恶意代码分析实战课后实验-静态分析基础技术/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://liangyuewei.com/2019/09/14/恶意代码分析实战课后实验-静态分析基础技术/&title=恶意代码分析实战课后实验-静态分析基础技术"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://liangyuewei.com/2019/09/14/恶意代码分析实战课后实验-静态分析基础技术/&title=恶意代码分析实战课后实验-静态分析基础技术"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://liangyuewei.com/2019/09/14/恶意代码分析实战课后实验-静态分析基础技术/&title=恶意代码分析实战课后实验-静态分析基础技术"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://liangyuewei.com/2019/09/14/恶意代码分析实战课后实验-静态分析基础技术/&title=恶意代码分析实战课后实验-静态分析基础技术"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://liangyuewei.com/2019/09/14/恶意代码分析实战课后实验-静态分析基础技术/&name=恶意代码分析实战课后实验-静态分析基础技术&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -137,7 +136,7 @@
   <header>
     
     <h1 class="posttitle" itemprop="name headline">
-        
+        恶意代码分析实战课后实验-静态分析基础技术
     </h1>
 
 
@@ -149,7 +148,7 @@
       
     <div class="postdate">
       
-        <time datetime="2019-09-13T02:18:11.793Z" itemprop="datePublished">2019-09-13</time>
+        <time datetime="2019-09-14T13:40:57.000Z" itemprop="datePublished">2019-09-14</time>
         
       
     </div>
@@ -158,15 +157,18 @@
       
 
       
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/恶意代码/">恶意代码</a>
+    </div>
+
 
     </div>
   </header>
   
 
   <div class="content" itemprop="articleBody">
-    <p>title: 恶意代码分析实战课后实验-静态分析基础技术<br>date: 2019-09-13 10:18:11<br>tags: 恶意代码分析</p>
-<h1 id="Lab1-1"><a href="#Lab1-1" class="headerlink" title="Lab1-1"></a>Lab1-1</h1><p><strong>问题</strong></p>
-<ol>
+    <h1 id="Lab1-1"><a href="#Lab1-1" class="headerlink" title="Lab1-1"></a>Lab1-1</h1><ol>
 <li>将文件上传至<code>http://www.VirusTotal.com</code>进行分析并查看报告。文件匹配到了已有的反病毒软件特征吗？</li>
 </ol>
 <p><img src="/images/MalwareAnalysis-Labs/lab1/virustotal_lab01-01.png" alt="virustotal_lab01-01"></p>
@@ -176,21 +178,21 @@
 <p>在 PE结构中包含一个名为 IMAGE_FILE_HEADER 的结构，其中的 TimeDateStamp 用于保存文件的编译时间。所以可以使用 PETools 工具查看文件编译时间。</p>
 </li>
 </ol>
-<p><img src="/images/MalwareAnalysis-Labs/lab1/lab1-1Pe 编译时间.png" alt="lab1-1Pe 编译时间"></p>
+<p><img src="/images/MalwareAnalysis-Labs/lab1/lab1-1Pe%20%E7%BC%96%E8%AF%91%E6%97%B6%E9%97%B4.png" alt="lab1-1Pe 编译时间"></p>
 <p>​    可以看到 lab01-01.exe文件的编译时间是 2010 年 12 月 19 日16:16:19编译出来的</p>
 <ol start="3">
 <li><p>这两个文件中是否存在迹象说明它们是否被加壳或混淆了？如果是，这些迹象在哪里？</p>
 <p>使用 PEid 工具查看文件是否被加壳。</p>
 </li>
 </ol>
-<p><img src="/images/MalwareAnalysis-Labs/lab1/lab1-1Pe 加壳.png" alt="lab1-1Pe 加壳"></p>
+<p><img src="/images/MalwareAnalysis-Labs/lab1/lab1-1Pe%20%E5%8A%A0%E5%A3%B3.png" alt="lab1-1Pe 加壳"></p>
 <p>​        程序是由 Vistual C++ 编写，并没有进行加壳</p>
 <ol start="4">
 <li><p>是否有导入函数显示出了这个恶意代码是做什么的？如果是，是哪些导入函数？</p>
 <p>使用 PEiD 工具查看导入函数，lab01-01.exe文件引入了两个动态链接库：KERNEL32.dll 和 MSVCRT.dll</p>
 </li>
 </ol>
-<p><img src="/images/MalwareAnalysis-Labs/lab1/lab1-1Pe 导入信息.png" alt="lab1-1Pe 导入信息"></p>
+<p><img src="/images/MalwareAnalysis-Labs/lab1/lab1-1Pe%20%E5%AF%BC%E5%85%A5%E4%BF%A1%E6%81%AF.png" alt="lab1-1Pe 导入信息"></p>
 <ol start="5">
 <li><p>是否有任何其他文件或基于主机的迹象，让你可以在受感染系统上查找？</p>
 <p>使用 Strings.exe 程序分析 Lab01-01.exe 文件，可以发现“kerne132.dll”隐藏文件。</p>
@@ -290,8 +292,9 @@
 </ul>
 </li>
 </ol>
-<p><img src="/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab1/lab1-4-8.png" alt="lab1-4-8"></p>
+<p><img src alt="lab1-4-8"></p>
 <p>​        * 使用PETools 工具查看文件，可以看到DLL 没有打钩，所以可以判断是 exe 文件。</p>
+<p><img src="/images/MalwareAnalysis-Labs/lab1/lab1-4-6.png" alt="lab1-4-6"></p>
 
   </div>
 </article>
@@ -320,16 +323,16 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://liangyuewei.com/2019/09/13/恶意代码分析实战课后实验-静态分析基础技术/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=http://liangyuewei.com/2019/09/13/恶意代码分析实战课后实验-静态分析基础技术/&text="><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://liangyuewei.com/2019/09/13/恶意代码分析实战课后实验-静态分析基础技术/&title="><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://liangyuewei.com/2019/09/13/恶意代码分析实战课后实验-静态分析基础技术/&is_video=false&description="><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=&body=Check out this article: http://liangyuewei.com/2019/09/13/恶意代码分析实战课后实验-静态分析基础技术/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=http://liangyuewei.com/2019/09/13/恶意代码分析实战课后实验-静态分析基础技术/&title="><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=http://liangyuewei.com/2019/09/13/恶意代码分析实战课后实验-静态分析基础技术/&title="><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://liangyuewei.com/2019/09/13/恶意代码分析实战课后实验-静态分析基础技术/&title="><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=http://liangyuewei.com/2019/09/13/恶意代码分析实战课后实验-静态分析基础技术/&title="><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://liangyuewei.com/2019/09/13/恶意代码分析实战课后实验-静态分析基础技术/&name=&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://liangyuewei.com/2019/09/14/恶意代码分析实战课后实验-静态分析基础技术/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://liangyuewei.com/2019/09/14/恶意代码分析实战课后实验-静态分析基础技术/&text=恶意代码分析实战课后实验-静态分析基础技术"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://liangyuewei.com/2019/09/14/恶意代码分析实战课后实验-静态分析基础技术/&title=恶意代码分析实战课后实验-静态分析基础技术"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://liangyuewei.com/2019/09/14/恶意代码分析实战课后实验-静态分析基础技术/&is_video=false&description=恶意代码分析实战课后实验-静态分析基础技术"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=恶意代码分析实战课后实验-静态分析基础技术&body=Check out this article: http://liangyuewei.com/2019/09/14/恶意代码分析实战课后实验-静态分析基础技术/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://liangyuewei.com/2019/09/14/恶意代码分析实战课后实验-静态分析基础技术/&title=恶意代码分析实战课后实验-静态分析基础技术"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://liangyuewei.com/2019/09/14/恶意代码分析实战课后实验-静态分析基础技术/&title=恶意代码分析实战课后实验-静态分析基础技术"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://liangyuewei.com/2019/09/14/恶意代码分析实战课后实验-静态分析基础技术/&title=恶意代码分析实战课后实验-静态分析基础技术"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://liangyuewei.com/2019/09/14/恶意代码分析实战课后实验-静态分析基础技术/&title=恶意代码分析实战课后实验-静态分析基础技术"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://liangyuewei.com/2019/09/14/恶意代码分析实战课后实验-静态分析基础技术/&name=恶意代码分析实战课后实验-静态分析基础技术&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
