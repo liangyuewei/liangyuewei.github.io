@@ -6,20 +6,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="description" content="Lab3-1 找出这个恶意代码的导入函数与字符串列表？  使用 PEiD 工具查看导入函数，该文件只调用 kernel32.dll 动态链接库，且只有 ExitProcess 函数。   使用 strings.exe 查看字符串列表，存在注册表信息和可疑网址     这个恶意代码在主机上的感染迹象特征是什么？    这个恶意代码是否存在一些有用的网络特征码？如果存在，它们是什么？">
+    <meta name="description" content="Lab3-1 找出这个恶意代码的导入函数与字符串列表？  使用 PEiD 工具查看导入函数，该文件只调用 kernel32.dll 动态链接库，且只有 ExitProcess 函数。   使用 strings.exe 查看字符串列表，存在注册表信息和可疑网址     这个恶意代码在主机上的感染迹象特征是什么？ 使用Process monitor 监控查看，发现 Seed 的键值，用于随机数生成，发">
 <meta name="keywords" content="恶意代码分析">
 <meta property="og:type" content="article">
 <meta property="og:title" content="恶意代码分析实战课后实验-动态分析基础技术">
 <meta property="og:url" content="http://liangyuewei.com/2019/09/14/恶意代码分析实战课后实验-动态分析基础技术/index.html">
 <meta property="og:site_name" content="Yuewei.Liang">
-<meta property="og:description" content="Lab3-1 找出这个恶意代码的导入函数与字符串列表？  使用 PEiD 工具查看导入函数，该文件只调用 kernel32.dll 动态链接库，且只有 ExitProcess 函数。   使用 strings.exe 查看字符串列表，存在注册表信息和可疑网址     这个恶意代码在主机上的感染迹象特征是什么？    这个恶意代码是否存在一些有用的网络特征码？如果存在，它们是什么？">
+<meta property="og:description" content="Lab3-1 找出这个恶意代码的导入函数与字符串列表？  使用 PEiD 工具查看导入函数，该文件只调用 kernel32.dll 动态链接库，且只有 ExitProcess 函数。   使用 strings.exe 查看字符串列表，存在注册表信息和可疑网址     这个恶意代码在主机上的感染迹象特征是什么？ 使用Process monitor 监控查看，发现 Seed 的键值，用于随机数生成，发">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://liangyuewei.com/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab3/lab3-1-1.png">
 <meta property="og:image" content="http://liangyuewei.com/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab3/lab3-1-2.png">
-<meta property="og:updated_time" content="2019-09-14T07:42:58.822Z">
+<meta property="og:updated_time" content="2019-09-15T08:58:29.943Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="恶意代码分析实战课后实验-动态分析基础技术">
-<meta name="twitter:description" content="Lab3-1 找出这个恶意代码的导入函数与字符串列表？  使用 PEiD 工具查看导入函数，该文件只调用 kernel32.dll 动态链接库，且只有 ExitProcess 函数。   使用 strings.exe 查看字符串列表，存在注册表信息和可疑网址     这个恶意代码在主机上的感染迹象特征是什么？    这个恶意代码是否存在一些有用的网络特征码？如果存在，它们是什么？">
+<meta name="twitter:description" content="Lab3-1 找出这个恶意代码的导入函数与字符串列表？  使用 PEiD 工具查看导入函数，该文件只调用 kernel32.dll 动态链接库，且只有 ExitProcess 函数。   使用 strings.exe 查看字符串列表，存在注册表信息和可疑网址     这个恶意代码在主机上的感染迹象特征是什么？ 使用Process monitor 监控查看，发现 Seed 的键值，用于随机数生成，发">
 <meta name="twitter:image" content="http://liangyuewei.com/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab3/lab3-1-1.png">
     
     
@@ -160,10 +160,10 @@
 </ul>
 </li>
 <li><p>这个恶意代码在主机上的感染迹象特征是什么？</p>
+<p>使用Process monitor 监控查看，发现 Seed 的键值，用于随机数生成，发现程序在系统目录中创建名为 vmx32to64.exe 的程序，并发现程序添加了名为 <code>VideoDriver</code>自启动项。</p>
 </li>
-</ol>
-<ol start="3">
-<li>这个恶意代码是否存在一些有用的网络特征码？如果存在，它们是什么？</li>
+<li><p>这个恶意代码是否存在一些有用的网络特征码？如果存在，它们是什么？</p>
+</li>
 </ol>
 
   </div>

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Lab5-1 DllMain的地址是什么？ 使用 IDA Pro 直接载入，可以直接看到 DllMain 的地址为0x1000D089   使用Imports窗口并浏览到gethostbyname，导入函数定位到什么地址？ 切换到 Imports 窗口，找到 gethostbyname得到函数定位地址为：0x100163CC   有多少函数调用了gethostbyname ？ 使用 IDA Pro">
+<meta name="keywords" content="恶意代码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="恶意代码分析实战课后实验-IDA Pro">
+<meta property="og:url" content="http://liangyuewei.com/2019/09/15/恶意代码分析实战课后实验-IDA-Pro/index.html">
+<meta property="og:site_name" content="Yuewei.Liang">
+<meta property="og:description" content="Lab5-1 DllMain的地址是什么？ 使用 IDA Pro 直接载入，可以直接看到 DllMain 的地址为0x1000D089   使用Imports窗口并浏览到gethostbyname，导入函数定位到什么地址？ 切换到 Imports 窗口，找到 gethostbyname得到函数定位地址为：0x100163CC   有多少函数调用了gethostbyname ？ 使用 IDA Pro">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://liangyuewei.com/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab5/lab5-1.png">
+<meta property="og:image" content="http://liangyuewei.com/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab5/lab5-2.png">
+<meta property="og:image" content="http://liangyuewei.com/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab5/lab5-3.png">
+<meta property="og:image" content="http://liangyuewei.com/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab5/lab5-4.png">
+<meta property="og:image" content="http://liangyuewei.com/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab5/lab5-4-1.png">
+<meta property="og:image" content="http://liangyuewei.com/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab5/lab5-5.png">
+<meta property="og:image" content="http://liangyuewei.com/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab5/lab5-7.png">
+<meta property="og:image" content="http://liangyuewei.com/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab5/lab5-8.png">
+<meta property="og:image" content="http://liangyuewei.com/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab5/lab5-8-1.png">
+<meta property="og:image" content="http://liangyuewei.com/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab5/lab5-9.png">
+<meta property="og:image" content="http://liangyuewei.com/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab5/lab5-9-1.png">
+<meta property="og:image" content="http://liangyuewei.com/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab5/lab5-10.png">
+<meta property="og:image" content="http://liangyuewei.com/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab5/lab5-10-1.png">
+<meta property="og:updated_time" content="2019-10-29T12:00:52.533Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="恶意代码分析实战课后实验-IDA Pro">
+<meta name="twitter:description" content="Lab5-1 DllMain的地址是什么？ 使用 IDA Pro 直接载入，可以直接看到 DllMain 的地址为0x1000D089   使用Imports窗口并浏览到gethostbyname，导入函数定位到什么地址？ 切换到 Imports 窗口，找到 gethostbyname得到函数定位地址为：0x100163CC   有多少函数调用了gethostbyname ？ 使用 IDA Pro">
+<meta name="twitter:image" content="http://liangyuewei.com/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab5/lab5-1.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>恶意代码分析实战课后实验-IDA Pro</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2019/09/14/恶意代码分析实战课后实验-静态分析基础技术/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://liangyuewei.com/2019/09/15/恶意代码分析实战课后实验-IDA-Pro/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://liangyuewei.com/2019/09/15/恶意代码分析实战课后实验-IDA-Pro/&text=恶意代码分析实战课后实验-IDA Pro"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://liangyuewei.com/2019/09/15/恶意代码分析实战课后实验-IDA-Pro/&title=恶意代码分析实战课后实验-IDA Pro"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://liangyuewei.com/2019/09/15/恶意代码分析实战课后实验-IDA-Pro/&is_video=false&description=恶意代码分析实战课后实验-IDA Pro"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=恶意代码分析实战课后实验-IDA Pro&body=Check out this article: http://liangyuewei.com/2019/09/15/恶意代码分析实战课后实验-IDA-Pro/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://liangyuewei.com/2019/09/15/恶意代码分析实战课后实验-IDA-Pro/&title=恶意代码分析实战课后实验-IDA Pro"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://liangyuewei.com/2019/09/15/恶意代码分析实战课后实验-IDA-Pro/&title=恶意代码分析实战课后实验-IDA Pro"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://liangyuewei.com/2019/09/15/恶意代码分析实战课后实验-IDA-Pro/&title=恶意代码分析实战课后实验-IDA Pro"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://liangyuewei.com/2019/09/15/恶意代码分析实战课后实验-IDA-Pro/&title=恶意代码分析实战课后实验-IDA Pro"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://liangyuewei.com/2019/09/15/恶意代码分析实战课后实验-IDA-Pro/&name=恶意代码分析实战课后实验-IDA Pro&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Lab5-1"><span class="toc-number">1.</span> <span class="toc-text">Lab5-1</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        恶意代码分析实战课后实验-IDA Pro
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Yuewei.Liang</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-09-15T07:45:52.000Z" itemprop="datePublished">2019-09-15</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/恶意代码/">恶意代码</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="Lab5-1"><a href="#Lab5-1" class="headerlink" title="Lab5-1"></a>Lab5-1</h1><ol>
+<li><p>DllMain的地址是什么？</p>
+<p>使用 IDA Pro 直接载入，可以直接看到 DllMain 的地址为0x1000D089</p>
+<p><img src="/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab5/lab5-1.png" alt="lab5-1"></p>
+</li>
+<li><p>使用Imports窗口并浏览到gethostbyname，导入函数定位到什么地址？</p>
+<p>切换到 Imports 窗口，找到 gethostbyname得到函数定位地址为：0x100163CC</p>
+<p><img src="/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab5/lab5-2.png" alt="lab5-2"></p>
+</li>
+<li><p>有多少函数调用了gethostbyname ？</p>
+<p>使用 IDA Pro 的交叉引用功能，在键盘上按下Ctrl + X ，打开交叉引用窗口。</p>
+<p><img src="/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab5/lab5-3.png" alt="lab5-3"></p>
+<p>可以看到 18 个结果。其中有 一半以 P开头为函数调用，一半以 r 开头为读取。在函数调用了有几个是重复的，所以有 5 个函数调用了 gethostbyname</p>
+</li>
+<li><p>将精力集中在位于0x10001757处的对gethostbyname 的调用，你能找出哪个DNS请求将被触发吗？</p>
+<p>按下 G 直接跳转到 0x10001757处，查看该函数被调用时可以发现off_10019040被赋予 eax 寄存器，查看内容可以知道 dns 的请求是pics.praticalmalwareanalys.com</p>
+<p><img src="/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab5/lab5-4.png" alt="lab5-4"></p>
+</li>
+</ol>
+<p><img src="/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab5/lab5-4-1.png" alt="lab5-4-1"></p>
+<ol start="5">
+<li><p>IDA Pro识别了在0x10001656处的子过程中的多少个局部变量？</p>
+</li>
+<li><p>IDA Pro识别了在0x10001656处的子过程中的多少个参数？</p>
+<p>使用 jump to address 跳转到 0x10001656 的位置处，负值为局部变量，正值为参数。</p>
+<p><img src="/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab5/lab5-5.png" alt="lab5-5"></p>
+</li>
+<li><p>使用Strings窗口，来在反汇编中定位字符串\cmd.exe /c。它位于哪？</p>
+<p>在 View 菜单下选择 Open Subviews，选择 Strings 选项，找到字符串双击后即可。</p>
+<p><img src="/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab5/lab5-7.png" alt="lab5-7"></p>
+</li>
+<li><p>在引用\cmd.exe /c的代码所在的区域发生了什么?</p>
+<p>在代码所在区域出现 Remote Shell Session 字符，怀疑是进行远程 shell 调用。</p>
+</li>
+</ol>
+<p><img src="/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab5/lab5-8.png" alt="lab5-8"></p>
+<p>​    继续跟进调用该字符串的函数，可以发现 recv，memcmp 等函数，那么基本可以判断为攻击者开启了远程 shell。</p>
+<p>​    <img src="/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab5/lab5-8-1.png" alt="lab5-8-1"></p>
+<ol start="9">
+<li>在同样的区域，在0x100101C8处，看起来好像dword_1008E5C4是一个全局变量，它帮助决定走哪条路径。那恶意代码是如何设置dword_1008E5C4 的呢？（提示：使用dword_1008E5C4 的交叉引用。）</li>
+</ol>
+<p>首先按 G 跳到 0x100101C8 处，双击该变量后按 Ctrl + X 打开交叉引用窗口</p>
+<p><img src="/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab5/lab5-9.png" alt="lab5-9"></p>
+<p>只有第一项是设置 dword_1008E5C4变量, 查看0x10003695处的代码可以看到调用了 GetversionExA函数。到此就可以知道 dword_1008E5C4 存储着操作系统的版本信息。</p>
+<p><img src="/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab5/lab5-9-1.png" alt="lab5-9-1"></p>
+<ol start="10">
+<li>在位于0x1000FF58处的子过程中的几百行指令中，一系列使用memcmp来比较字符串的比较。如果对robotwork的字符串比较是成功的（当memcmp返回0），会发生什么？</li>
+</ol>
+<p>首先调到 0x1000FF58处，向下找到 robotwork字符串，如果字符串比较成功，可以知道程序打开注册表，并对其进行访问</p>
+<p><img src="/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab5/lab5-10.png" alt="lab5-10"></p>
+<p><img src="/Users/liangyuewei/Wiki/liangyuewei.github.io/source/images/MalwareAnalysis-Labs/lab5/lab5-10-1.png" alt="lab5-10-1"></p>
+<ol start="11">
+<li>PSLIST 导出函数做了什么？</li>
+</ol>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Lab5-1"><span class="toc-number">1.</span> <span class="toc-text">Lab5-1</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://liangyuewei.com/2019/09/15/恶意代码分析实战课后实验-IDA-Pro/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://liangyuewei.com/2019/09/15/恶意代码分析实战课后实验-IDA-Pro/&text=恶意代码分析实战课后实验-IDA Pro"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://liangyuewei.com/2019/09/15/恶意代码分析实战课后实验-IDA-Pro/&title=恶意代码分析实战课后实验-IDA Pro"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://liangyuewei.com/2019/09/15/恶意代码分析实战课后实验-IDA-Pro/&is_video=false&description=恶意代码分析实战课后实验-IDA Pro"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=恶意代码分析实战课后实验-IDA Pro&body=Check out this article: http://liangyuewei.com/2019/09/15/恶意代码分析实战课后实验-IDA-Pro/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://liangyuewei.com/2019/09/15/恶意代码分析实战课后实验-IDA-Pro/&title=恶意代码分析实战课后实验-IDA Pro"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://liangyuewei.com/2019/09/15/恶意代码分析实战课后实验-IDA-Pro/&title=恶意代码分析实战课后实验-IDA Pro"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://liangyuewei.com/2019/09/15/恶意代码分析实战课后实验-IDA-Pro/&title=恶意代码分析实战课后实验-IDA Pro"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://liangyuewei.com/2019/09/15/恶意代码分析实战课后实验-IDA-Pro/&title=恶意代码分析实战课后实验-IDA Pro"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://liangyuewei.com/2019/09/15/恶意代码分析实战课后实验-IDA-Pro/&name=恶意代码分析实战课后实验-IDA Pro&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Yuewei.Liang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-86660611-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
